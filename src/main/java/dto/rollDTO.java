@@ -1,6 +1,6 @@
 package dto;
 
-public class memberDTO {
+public class rollDTO {
     private int member_pk;
     private String member_id;
     private String member_pw;

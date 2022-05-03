@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.Abandoned_noticeMapper">
+    <resultMap id="result" type="dto.Abandoned_noticeDTO">
+        <result property="abandoned_notice_pk" column="abandoned_notice_pk"/>
+        <result property="shelter_list_pk" column="shelter_list_pk"/>
+        <result property="abandoned_notice_num" column="abandoned_notice_num"/>
+        <result property="abandoned_receipt_date" column="abandoned_receipt_date"/>
+        <result property="abandoned_place" column="abandoned_place"/>
+        <result property="abandoned_period" column="abandoned_period"/>
+    </resultMap>
+    <resultMap id="shelterResult" type="dto.shelter_listDTO">
+        <result property="shelter_list_pk" column="shelter_list_pk"/>
+        <result property="shelter_name" column="shelter_name"/>
+        <result property="shelter_phone" column="shelter_phone"/>
+        <result property="shelter_county" column="shelter_county"/>
+        <result property="shelter_type" column="shelter_type"/>
+        <result property="shelter_opentime" column="shelter_opentime"/>
+        <result property="shelter_closetime" column="shelter_closetime"/>
+        <result property="shelter_city" column="shelter_city"/>
+    </resultMap>
+    <resultMap id="animalResult" type="dto.AnimalDTO">
+        <result property="animal_pk" column="animal_pk"/>
+        <result property="animal_kind" column="animal_kind"/>
+        <result property="animal_sex" column="animal_sex"/>
+        <result property="animal_age" column="animal_age"/>
+        <result property="animal_color" column="animal_color"/>
+        <result property="animal_feature" column="animal_feature"/>
+        <result property="animal_breed" column="animal_breed"/>
+        <result property="animal_neuter" column="animal_neuter"/>
+        <result property="animal_img" column="animal_img"/>
+    </resultMap>
+
+    <select id="ReadAll" resultMap="result,shelterResult,animalResult">
+        SELECT *
+        FROM ABANDONED_NOTICE as abandoned
+        JOIN ANIMAL as animal
+        on abandoned.abandoned_animal_pk = animal.animal_pk
+    </select>
+
+    <select id="FindByOption" resultMap="result">
+        SELECT a.abandoned_notice_num, a.abandoned_receipt_date, a.abandoned_place, a.abandoned_period,animal.animal_kind, animal.animal_sex, animal.animal_age,
+        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img
+        FROM ABANDONED_NOTICE as a
+        JOIN SHELTER_LIST as s
+        ON a.shelter_list_pk = s.shelter_list_pk
+        JOIN ANIMAL as animal
+        on a.abandoned_animal_pk = animal.animal_pk
+        <where>
+            s.shelter_county = #{shelter_county} AND s.shelter_city= #{shelter_city}
+        </where>
+    </select>
+
+    <update id="UpdateAbandoned" parameterType="dto.Abandoned_noticeDTO">
+        UPDATE ABANDONED_NOTICE
+        SET abandoned_notice_num=#{abandoned_notice_num},
+            abandoned_receipt_date=#{abandoned_receipt_date},
+            abandoned_place=#{abandoned_place},
+            abandoned_period=#{abandoned_period},
+        WHERE abandoned_notice_pk= #{abandoned_notice_pk}
+    </update>
+
+    <insert id="InsertAbandoned" parameterType="dto.Abandoned_noticeDTO">
+        INSERT INTO ABANDONED_NOTICE(abandoned_animal_pk, shelter_list_pk, abandoned_notice_num, abandoned_receipt_date, abandoned_place, abandoned_period)
+        VALUES (#{abandoned_animal_pk},#{shelter_list_pk},#{abandoned_notice_num}, #{abandoned_receipt_date}, #{abandoned_place}, #{abandoned_period})
+    </insert>
+
+    <delete id="RemoveAbandoned" parameterType="long" >
+        DELETE FROM ABANDONED_NOTICE
+        WHERE abandoned_notice_pk = #{abandoned_notice_pk}
+    </delete>
+</mapper>

@@ -2,12 +2,17 @@ package dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.sql.Blob;
 
 @Getter
 @Setter
-public class animalDTO {
+@ToString
+public class AnimalDTO {
     private int animal_pk;
     private String animal_kind;
     private String animal_sex;
@@ -16,5 +21,5 @@ public class animalDTO {
     private String animal_feature;
     private String animal_breed;
     private boolean animal_neuter;
-    private Image animal_img;
+    private String animal_img;
 }

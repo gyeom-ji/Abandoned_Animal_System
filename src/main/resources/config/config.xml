@@ -4,25 +4,27 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <!--        <typeAlias alias="Board" type="infra.dto"/>-->
+        <typeAlias alias="Abandoned_notice" type="dto.Abandoned_noticeDTO"/>
+        <typeAlias alias="Animal" type="dto.AnimalDTO"/>
+        <typeAlias alias="Form" type="dto.FormDTO"/>
+        <typeAlias alias="Missing_notice" type="dto.Missing_noticeDTO"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
-            <!--  connecting to Local MySql -->
+            <!-- connecting to Local MySql -->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost/abandoned_animal?useSSL=false&amp;allowPublicKeyRetrieval=true"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/abandoned_animal?characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true"/>
                 <property name="username" value="root"/>
-                <property name="password" value="!smj435821"/>
+                <property name="password" value="wl87901@"/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-<!--        <mapper resource="sqlmapper/abandoned_notice.xml"/>-->
-<!--        <mapper resource="sqlmapper/admin.xml"/>-->
-<!--        <mapper resource="sqlmapper/animal.xml"/>-->
-<!--        <mapper resource="sqlmapper/animal_rescue.xml"/>-->
-<!--        <mapper resource="sqlmapper/form.xml"/>-->
+        <mapper resource="sqlmapper/abandoned_notice.xml"/>
+        <mapper resource="sqlmapper/missing_notice.xml"/>
+        <mapper resource="sqlmapper/animal.xml"/>
+        <mapper resource="sqlmapper/form.xml"/>
     </mappers>
 </configuration>

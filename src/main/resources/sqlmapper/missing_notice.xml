@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.Missing_noticeMapper">
+    <resultMap id="result" type="dto.Missing_noticeDTO">
+        <result property="missing_notice_pk" column="missing_notice_pk"/>
+        <result property="missing_animal_pk" column="missing_animal_pk"/>
+        <result property="missing_person_name" column="missing_person_name"/>
+        <result property="missing_email" column="missing_email"/>
+        <result property="missing_phone" column="missing_phone"/>
+        <result property="missing_date" column="missing_date"/>
+        <result property="missing_place" column="missing_place"/>
+    </resultMap>
+    <resultMap id="animalResult" type="dto.AnimalDTO">
+        <result property="animal_pk" column="animal_pk"/>
+        <result property="animal_kind" column="animal_kind"/>
+        <result property="animal_sex" column="animal_sex"/>
+        <result property="animal_age" column="animal_age"/>
+        <result property="animal_color" column="animal_color"/>
+        <result property="animal_feature" column="animal_feature"/>
+        <result property="animal_breed" column="animal_breed"/>
+        <result property="animal_neuter" column="animal_neuter"/>
+        <result property="animal_img" column="animal_img"/>
+    </resultMap>
+
+    <select id="ReadAll" resultMap="result">
+        SELECT *
+        FROM MISSING_NOTICE as missing
+                 JOIN ANIMAL as animal
+                      on missing.missing_animal_pk = animal.animal_pk
+    </select>
+
+    <select id="FindByOption" resultMap="result">
+        SELECT *
+        FROM MISSING_NOTICE as missing
+        JOIN ANIMAL as animal
+        on missing.missing_animal_pk = animal.animal_pk
+        <where>
+           missing_county = #{missing_county} AND missing_city= #{missing_city}
+        </where>
+    </select>
+
+    <update id="UpdateMissing" parameterType="dto.Missing_noticeDTO">
+        UPDATE MISSING_NOTICE
+        SET missing_person_name=#{missing_person_name},
+            missing_animal_name=#{missing_animal_name},
+            missing_email=#{missing_email},
+            missing_phone=#{missing_phone},
+            missing_date=#{missing_date},
+            missing_county=#{missing_county},
+            missing_city=#{missing_city},
+            missing_address=#{missing_address},
+            WHERE missing_notice_pk= #{missing_notice_pk}
+    </update>
+
+    <insert id="InsertMissing" parameterType="dto.Missing_noticeDTO">
+        INSERT INTO MISSING_NOTICE(missing_animal_pk,missing_person_name, missing_animal_name, missing_email, missing_phone, missing_date, missing_county
+        , missing_city, missing_address)
+        VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}
+        ,#{missing_city}, #{missing_address})
+    </insert>
+
+    <delete id="RemoveMissing" parameterType="long" >
+        DELETE FROM MISSING_NOTICE
+        WHERE missing_notice_pk = #{missing_notice_pk}
+    </delete>
+</mapper>

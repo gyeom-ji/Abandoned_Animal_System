@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.AnimalMapper">
+    <resultMap id="result" type="dto.AnimalDTO">
+        <result property="animal_pk" column="animal_pk"/>
+        <result property="animal_kind" column="animal_kind"/>
+        <result property="animal_sex" column="animal_sex"/>
+        <result property="animal_age" column="animal_age"/>
+        <result property="animal_color" column="animal_color"/>
+        <result property="animal_feature" column="animal_feature"/>
+        <result property="animal_breed" column="animal_breed"/>
+        <result property="animal_neuter" column="animal_neuter"/>
+        <result property="animal_img" column="animal_img"/>
+    </resultMap>
+
+    <update id="UpdateAnimal" parameterType="dto.AnimalDTO">
+        UPDATE ANIMAL
+        SET animal_kind=#{animal_kind},
+            animal_sex=#{animal_sex},
+            animal_age=#{animal_age},
+            animal_color=#{animal_color},
+            animal_feature=#{animal_feature},
+            animal_breed=#{animal_breed},
+            animal_neuter=#{animal_neuter},
+            animal_img=#{animal_img},
+            WHERE animal_pk= #{animal_pk}
+    </update>
+
+    <insert id="InsertAnimal" parameterType="dto.AnimalDTO">
+        INSERT INTO ANIMAL(animal_kind, animal_sex, animal_age, animal_color, animal_feature, animal_breed, animal_neuter, animal_img)
+        VALUES (#{animal_kind}, #{animal_sex}, #{animal_age}, #{animal_color}, #{animal_feature}, #{animal_breed}, #{animal_neuter}, #{animal_img})
+    </insert>
+
+    <delete id="RemoveAnimal" parameterType="long" >
+        DELETE FROM ANIMAL
+        WHERE animal_pk = #{animal_pk}
+    </delete>
+</mapper>

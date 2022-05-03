@@ -1,7 +1,12 @@
 package dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class missing_noticeDTO {
     private int missing_notice_pk;
     private int missing_animal_pk;

@@ -1,4 +1,8 @@
 
+import dao.IRecommend_materialsDAO;
+import dao.IRollDAO;
+import dao.IShelter_listDAO;
+import dao.IVaccineDAO;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -16,6 +20,15 @@ public class MyBatisConnectionFactory {
             Reader reader = Resources.getResourceAsReader(resource);
             if (sqlSessionFactory == null) {
                 sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader,"development");
+                Class[] mappers = {
+                        IRollDAO.class,
+                        IShelter_listDAO.class,
+                        IRecommend_materialsDAO.class,
+                        IVaccineDAO.class
+                };
+                for(Class mapper:mappers){
+                    sqlSessionFactory.getConfiguration().addMapper(mapper);
+                }
             }
         }
         catch (FileNotFoundException fileNotFoundException) {

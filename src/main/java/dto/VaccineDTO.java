@@ -19,4 +19,5 @@ public class VaccineDTO {
     private String vaccine_animal_breed;
     private String vaccine_animal_age;
 
+
 }

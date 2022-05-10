@@ -1,6 +1,7 @@
 package dao;
 
 import dto.Abandoned_noticeDTO;
+import dto.Shelter_listDTO;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,13 +24,13 @@ public class Abandoned_noticeDAO {
         return list;
     }
 
-    public List<Abandoned_noticeDTO> FindByOption(Abandoned_noticeDTO abandoned_noticeDTO)
+    public List<Abandoned_noticeDTO> FindByOption(Shelter_listDTO shelter_listDTO)
     {
         List<Abandoned_noticeDTO> list = null;
 
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            list = session.selectList("mapper.Abandoned_noticeMapper.FindByOption", abandoned_noticeDTO);
+            list = session.selectList("mapper.Abandoned_noticeMapper.FindByOption", shelter_listDTO);
         } finally {
             session.close();
         }

@@ -36,10 +36,10 @@ public class Recommend_materialsDAO {
     }
 
     //추천상품 정보 삭제
-    public void delete_Recommend_materials(Recommend_materialsDTO recommend_materialsDTO) {
+    public void delete_Recommend_materials(long id) {
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IRecommend_materialsDAO.class).delete_Recommend_materials(recommend_materialsDTO);
+            session.getMapper(IRecommend_materialsDAO.class).delete_Recommend_materials(id);
             session.commit();
         } finally {
             session.close();

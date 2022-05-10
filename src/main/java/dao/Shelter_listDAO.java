@@ -73,10 +73,10 @@ public class Shelter_listDAO {
     }
 
     //보호소 정보 삭제
-    public void delete_Shelter_list(Shelter_listDTO shelter_listDTO) {
+    public void delete_Shelter_list(long id) {
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IShelter_listDAO.class).delete_Shelter_list(shelter_listDTO);
+            session.getMapper(IShelter_listDAO.class).delete_Shelter_list(id);
             session.commit();
         }
         finally {

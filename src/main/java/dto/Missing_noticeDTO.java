@@ -16,8 +16,9 @@ public class Missing_noticeDTO {
     private String missing_animal_name;
     private String missing_email;
     private String missing_phone;
-    private Date missing_date;
+    private String missing_date;
     private String missing_county;
     private String missing_city;
     private String missing_address;
+
 }

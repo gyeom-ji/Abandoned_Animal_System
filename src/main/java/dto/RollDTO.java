@@ -14,4 +14,5 @@ public class RollDTO {
     private String roll_name;
     private String roll_phone;
     private String roll_type;
+
 }

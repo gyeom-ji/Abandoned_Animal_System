@@ -10,7 +10,7 @@
         <result property="missing_date" column="missing_date"/>
         <result property="missing_place" column="missing_place"/>
     </resultMap>
-    <resultMap id="animalResult" type="dto.AnimalDTO">
+    <resultMap id="animal_result" type="dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -22,11 +22,12 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="ReadAll" resultMap="result">
+    <select id="ReadAll" resultMap="result,animal_result">
         SELECT *
         FROM MISSING_NOTICE as missing
                  JOIN ANIMAL as animal
                       on missing.missing_animal_pk = animal.animal_pk
+
     </select>
 
     <select id="FindByOption" resultMap="result">

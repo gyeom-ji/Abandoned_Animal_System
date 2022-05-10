@@ -17,6 +17,7 @@ public class Shelter_listDTO {
     private String shelter_city;
     private String shelter_address;
     private String shelter_type;
-    private Time shelter_open_time;
-    private Time shelter_close_time;
+    private String shelter_open_time;
+    private String shelter_close_time;
+
 }

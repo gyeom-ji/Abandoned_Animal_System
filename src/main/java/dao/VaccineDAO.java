@@ -37,10 +37,10 @@ public class VaccineDAO {
     }
 
     //백신 정보 삭제
-    public void delete_Vaccine(VaccineDTO vaccineDTO) {
+    public void delete_Vaccine(long id) {
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IVaccineDAO.class).delete_Vaccine(vaccineDTO);
+            session.getMapper(IVaccineDAO.class).delete_Vaccine(id);
             session.commit();
         } finally {
             session.close();

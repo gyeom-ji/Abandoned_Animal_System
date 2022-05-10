@@ -36,10 +36,10 @@ public class RollDAO {
     }
 
     //계정 정보 삭제
-    public void delete_Roll(RollDTO rollDTO) {
+    public void delete_Roll(long id) {
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IRollDAO.class).delete_Roll(rollDTO);
+            session.getMapper(IRollDAO.class).delete_Roll(id);
             session.commit();
         }
         finally {

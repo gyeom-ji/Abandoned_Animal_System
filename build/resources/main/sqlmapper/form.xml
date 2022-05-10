@@ -16,7 +16,7 @@
         <result property="abandoned_place" column="abandoned_place"/>
         <result property="abandoned_period" column="abandoned_period"/>
     </resultMap>
-    <resultMap id="roll_result" type="dto.rollDTO">
+    <resultMap id="roll_result" type="dto.RollDTO">
         <result property="roll_pk" column="roll_pk"/>
         <result property="roll_id" column="roll_id"/>
         <result property="roll_pw" column="roll_pw"/>
@@ -24,17 +24,17 @@
         <result property="roll_phone" column="roll_phone"/>
         <result property="roll_type" column="roll_type"/>
     </resultMap>
-    <resultMap id="shelterResult" type="dto.shelter_listDTO">
+    <resultMap id="shelter_result" type="dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="shelter_name" column="shelter_name"/>
         <result property="shelter_phone" column="shelter_phone"/>
         <result property="shelter_county" column="shelter_county"/>
         <result property="shelter_type" column="shelter_type"/>
-        <result property="shelter_opentime" column="shelter_opentime"/>
-        <result property="shelter_closetime" column="shelter_closetime"/>
+        <result property="shelter_open_time" column="shelter_open_time"/>
+        <result property="shelter_close_time" column="shelter_close_time"/>
         <result property="shelter_city" column="shelter_city"/>
     </resultMap>
-    <resultMap id="animalResult" type="dto.AnimalDTO">
+    <resultMap id="animal_result" type="dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -46,38 +46,28 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="FindByMember" parameterType="long" >
-        SELECT f.form_pk, f.form_type, f.form_approval, animal.animal_kind, animal.animal_sex, animal.animal_age,
-        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img
-        FROM FORM as f
-        JOIN abandoned_notice as a
-        ON f.abandoned_notice_pk = a.abandoned_notice_pk
-        JOIN animal as animal
-        ON animal.animal_pk = a.abandoned_animal_pk
-        <where>
-            f.roll_pk = #{roll_pk}
-        </where>
+    <select id="FindByMember" resultMap="result" parameterType="long" >
+        SELECT *
+        FROM FORM
+        WHERE roll_pk = #{roll_pk}
+
     </select>
 
-    <select id="FindByStaff" parameterType="long" >
-        SELECT f.form_pk, f.form_type, f.form_approval, r.roll_id, r.roll_name, r.roll_phone,animal.animal_kind, animal.animal_sex, animal.animal_age,
-        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img, a.abandoned_num
+    <select id="FindByStaff" resultMap="result,abandoned_result,shelter_result" parameterType="long" >
+        SELECT *
         FROM FORM as f
         JOIN abandoned_notice as a
         ON f.abandoned_notice_pk = a.abandoned_notice_pk
         JOIN shelter_list as s
         ON s.shelter_list_pk = a.shelter_list_pk
-        JOIN animal as animal
-        ON animal.animal_pk = a.abandoned_animal_pk
-        <where>
-            s.shelter_pk = #{shelter_pk}
-        </where>
+        WHERE s.shelter_list_pk = #{shelter_list_pk}
+
     </select>
 
     <update id="UpdateForm" parameterType="dto.FormDTO">
         UPDATE FORM
-        SET form_approval=#{form_approval},
-        WHERE form_pk= #{form_pk}
+        SET form_approval = #{form_approval}
+        WHERE form_pk = #{form_pk}
     </update>
 
     <insert id="InsertForm" parameterType="dto.FormDTO">

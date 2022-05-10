@@ -9,7 +9,7 @@
         <result property="abandoned_place" column="abandoned_place"/>
         <result property="abandoned_period" column="abandoned_period"/>
     </resultMap>
-    <resultMap id="shelterResult" type="dto.shelter_listDTO">
+    <resultMap id="shelterResult" type="dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="shelter_name" column="shelter_name"/>
         <result property="shelter_phone" column="shelter_phone"/>
@@ -31,21 +31,16 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="ReadAll" resultMap="result,shelterResult,animalResult">
+    <select id="ReadAll" resultMap="result">
         SELECT *
-        FROM ABANDONED_NOTICE as abandoned
-        JOIN ANIMAL as animal
-        on abandoned.abandoned_animal_pk = animal.animal_pk
+        FROM ABANDONED_NOTICE
     </select>
 
-    <select id="FindByOption" resultMap="result">
-        SELECT a.abandoned_notice_num, a.abandoned_receipt_date, a.abandoned_place, a.abandoned_period,animal.animal_kind, animal.animal_sex, animal.animal_age,
-        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img
+    <select id="FindByOption" resultMap="result,shelterResult,animalResult" >
+        SELECT *
         FROM ABANDONED_NOTICE as a
         JOIN SHELTER_LIST as s
         ON a.shelter_list_pk = s.shelter_list_pk
-        JOIN ANIMAL as animal
-        on a.abandoned_animal_pk = animal.animal_pk
         <where>
             s.shelter_county = #{shelter_county} AND s.shelter_city= #{shelter_city}
         </where>

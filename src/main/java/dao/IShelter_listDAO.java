@@ -40,5 +40,5 @@ public interface IShelter_listDAO {
 
     //보호소 정보 삭제 (
     @Delete("delete from shelter_list where shelter_list_pk = #{shelter_list_pk} ")
-    void delete_Shelter_list(Shelter_listDTO shelter_listDTO);
+    void delete_Shelter_list(long id);
 }

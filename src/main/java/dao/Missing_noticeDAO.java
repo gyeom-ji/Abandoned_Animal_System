@@ -13,9 +13,9 @@ public class Missing_noticeDAO {
 
     public Missing_noticeDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}
 
-    public List<Abandoned_noticeDTO> ReadAll()
+    public List<Missing_noticeDTO> ReadAll()
     {
-        List<Abandoned_noticeDTO> list = null;
+        List<Missing_noticeDTO> list = null;
         SqlSession session = sqlSessionFactory.openSession();
         try{
             list = session.selectList("mapper.Missing_noticeMapper.ReadAll");

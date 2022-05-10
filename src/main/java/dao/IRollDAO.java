@@ -28,5 +28,5 @@ public interface IRollDAO {
 
     //계정 정보 삭제 (
     @Delete("delete from roll where roll_pk = #{roll_pk} ")
-    void delete_Roll(RollDTO rollDTO);
+    void delete_Roll(long id);
 }

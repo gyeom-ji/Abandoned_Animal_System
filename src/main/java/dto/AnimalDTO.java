@@ -5,14 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
+import java.io.*;
 import java.sql.Blob;
 
 @Getter
 @Setter
 @ToString
-public class AnimalDTO {
+public class AnimalDTO implements Serializable {
     private int animal_pk;
     private String animal_kind;
     private String animal_sex;
@@ -22,4 +21,6 @@ public class AnimalDTO {
     private String animal_breed;
     private boolean animal_neuter;
     private String animal_img;
+
+
 }

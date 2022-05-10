@@ -23,8 +23,8 @@ public interface IRecommend_materialsDAO {
     List<Recommend_materialsDTO> getAll();
 
     //추천상품 정보 입력
-    @Insert("insert into recommend_materials (materials_name, materials_type, materials_url, materials_feature, materials_img,materials_form_pk,materials_animal_kind,materials_animal_breed,materials_animal_age) " +
-            "values( #{materials_name}, #{materials_type}, #{materials_url}, #{materials_feature}, #{materials_img}, #{materials_form_pk}, #{materials_animal_kind}, #{materials_animal_breed}, #{materials_animal_age} )")
+    @Insert("insert into recommend_materials (materials_name, materials_type, materials_url, materials_feature, materials_img, materials_animal_kind,materials_animal_breed,materials_animal_age,materials_form_pk) " +
+            "values( #{materials_name}, #{materials_type}, #{materials_url}, #{materials_feature}, #{materials_img},  #{materials_animal_kind}, #{materials_animal_breed}, #{materials_animal_age}, #{materials_form_pk} )")
     void insert_Recommend_materials(Recommend_materialsDTO recommend_materialsDTO);
 
     //추천상품 정보 수정
@@ -33,7 +33,7 @@ public interface IRecommend_materialsDAO {
 
     //추천상품 삭제
     @Delete("delete from recommend_materials where recommend_materials_pk = #{recommend_materials_pk} ")
-    void delete_Recommend_materials(Recommend_materialsDTO recommend_materialsDTO);
+    void delete_Recommend_materials(long id);
 
     //해당 동물 추천상품 조회
     @SelectProvider(type = mapper.Recommend_materialsSql.class, method = "selectRecommend_materials")

@@ -1,47 +1,75 @@
 
-import dao.Abandoned_noticeDAO;
-import dao.AnimalDAO;
-import dao.FormDAO;
-import dao.Missing_noticeDAO;
-import dto.Abandoned_noticeDTO;
-import dto.AnimalDTO;
-import dto.FormDTO;
-import dto.Missing_noticeDTO;
+import dao.*;
+import dto.*;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Abandoned_noticeDAO abandoned_noticeDAO = new Abandoned_noticeDAO(MyBatisConnectionFactory.getSqlSessionFactory());
-        AnimalDAO animalDAO = new AnimalDAO(MyBatisConnectionFactory.getSqlSessionFactory());
-        FormDAO formDAO = new FormDAO(MyBatisConnectionFactory.getSqlSessionFactory());
-        Missing_noticeDAO missing_noticeDAO = new Missing_noticeDAO(MyBatisConnectionFactory.getSqlSessionFactory());
+    public static void main(String[] args) throws IOException {
 
-        Abandoned_noticeDTO abandoned_noticeDTO = new Abandoned_noticeDTO();
-        AnimalDTO animalDTO = new AnimalDTO();
-        FormDTO formDTO = new FormDTO();
-        Missing_noticeDTO missing_noticeDTO = new Missing_noticeDTO();
-//        missing_noticeDTO.setMissing_address("용산");
-        missing_noticeDTO.setMissing_city("달서");
-//        missing_noticeDTO.setMissing_date(new Date(20210502));
-//        missing_noticeDTO.setMissing_email("ruawl12@naver.com");
-//        missing_noticeDTO.setMissing_animal_pk(3);
-//        missing_noticeDTO.setMissing_phone("010-3333-3333");
-//        missing_noticeDTO.setMissing_person_name("겸지");
-        missing_noticeDTO.setMissing_county("대구");
-//        missing_noticeDTO.setMissing_animal_name("뚱");
-//        missing_noticeDAO.InsertMissing(missing_noticeDTO);
-        List<Missing_noticeDTO> posts = missing_noticeDAO.FindByOption(missing_noticeDTO);
-        String str = posts.get(0).toString();
-        System.out.println(str);
+        Shelter_listDAO shelter_listDAO = new Shelter_listDAO(MyBatisConnectionFactory.getSqlSessionFactory());
+        Shelter_listDTO shelter_listDTO = new Shelter_listDTO();
 
-        String target = "pk";
-        int target_num = str.indexOf(target);
-        String result = str.substring(target_num+3,(str.substring(target_num).indexOf(',')+target_num));
-        System.out.println(result);
+        ArrayList<Shelter_listDTO> list = new ArrayList<Shelter_listDTO>();
 
-        missing_noticeDAO.RemoveMissing(Integer.parseInt(result));
+        BufferedReader in = new BufferedReader(new FileReader("/Users/yungyeomji/Downloads/shelter_list.csv"));
+
+        String str;
+        while(true) {
+            str = in.readLine();
+            if(str == null) break;
+
+            StringTokenizer tokens = new StringTokenizer(str,",");
+
+            while(tokens.hasMoreElements()) {
+                shelter_listDTO.setShelter_name(tokens.nextToken());
+                shelter_listDTO.setShelter_phone(tokens.nextToken());
+                tokens.nextToken(); //관할구역 넘김
+                shelter_listDTO.setShelter_type(tokens.nextToken());
+                String div_address = tokens.nextToken(); // 주소분할
+                String[] addressArr = div_address.split(" ", 3);
+                shelter_listDTO.setShelter_county(addressArr[0]);
+                shelter_listDTO.setShelter_city(addressArr[1]);
+                shelter_listDTO.setShelter_address(addressArr[2]);
+
+                //시간
+                boolean open = tokens.hasMoreElements();
+                if(open == true){
+                    shelter_listDTO.setShelter_open_time(tokens.nextToken());
+                }
+                else{
+                    shelter_listDTO.setShelter_open_time(null);
+                }
+                boolean close = tokens.hasMoreElements();
+                if(close == true){
+                    shelter_listDTO.setShelter_close_time(tokens.nextToken());
+                }
+                else{
+                    shelter_listDTO.setShelter_close_time(null);
+                }
+
+
+
+//                shelter_listDTO.setShelter_open_time(tokens.nextToken());
+//                shelter_listDTO.setShelter_close_time(tokens.nextToken());
+
+                shelter_listDAO.insert_Shelter_list(shelter_listDTO);
+
+                System.out.println(shelter_listDTO);
+
+                list.add(shelter_listDTO);
+            }
+        }
+
+
+
     }
-
 }

@@ -1,4 +1,4 @@
 DRIVER_CLASS=com.mysql.cj.jdbc.Driver
 DB_USER=root
-DB_CONNECTION_URL=jdbc:mysql://127.0.0.1:3306/abandoned_animal?characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+DB_CONNECTION_URL=jdbc:mysql://127.0.0.1:3306/abandoned_animal?characterEncoding=utf8&serverTimezone=UTC&useSSL=false&zeroDateTimeBehavior=convertToNull
 DB_PWD=wl87901@

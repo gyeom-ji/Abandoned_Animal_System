@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.FormMapper">
-    <resultMap id="result" type="dto.FormDTO">
+    <resultMap id="result" type="DB.dto.FormDTO">
         <result property="form_pk" column="form_pk"/>
         <result property="abandoned_notice_pk" column="abandoned_notice_pk"/>
         <result property="roll_pk" column="roll_pk"/>
         <result property="form_type" column="form_type"/>
         <result property="form_approval" column="form_approval"/>
     </resultMap>
-    <resultMap id="abandoned_result" type="dto.Abandoned_noticeDTO">
+    <resultMap id="abandoned_result" type="DB.dto.Abandoned_noticeDTO">
         <result property="abandoned_notice_pk" column="abandoned_notice_pk"/>
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="abandoned_num" column="abandoned_num"/>
@@ -16,7 +16,7 @@
         <result property="abandoned_place" column="abandoned_place"/>
         <result property="abandoned_period" column="abandoned_period"/>
     </resultMap>
-    <resultMap id="roll_result" type="dto.rollDTO">
+    <resultMap id="roll_result" type="DB.dto.RollDTO">
         <result property="roll_pk" column="roll_pk"/>
         <result property="roll_id" column="roll_id"/>
         <result property="roll_pw" column="roll_pw"/>
@@ -24,17 +24,17 @@
         <result property="roll_phone" column="roll_phone"/>
         <result property="roll_type" column="roll_type"/>
     </resultMap>
-    <resultMap id="shelterResult" type="dto.shelter_listDTO">
+    <resultMap id="shelter_result" type="DB.dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="shelter_name" column="shelter_name"/>
         <result property="shelter_phone" column="shelter_phone"/>
         <result property="shelter_county" column="shelter_county"/>
         <result property="shelter_type" column="shelter_type"/>
-        <result property="shelter_opentime" column="shelter_opentime"/>
-        <result property="shelter_closetime" column="shelter_closetime"/>
+        <result property="shelter_open_time" column="shelter_open_time"/>
+        <result property="shelter_close_time" column="shelter_close_time"/>
         <result property="shelter_city" column="shelter_city"/>
     </resultMap>
-    <resultMap id="animalResult" type="dto.AnimalDTO">
+    <resultMap id="animal_result" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -46,41 +46,40 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="FindByMember" parameterType="long" >
-        SELECT f.form_pk, f.form_type, f.form_approval, animal.animal_kind, animal.animal_sex, animal.animal_age,
-        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img
+    <select id="FindByMember" resultMap="result,roll_result" parameterType="String" >
+        SELECT *
         FROM FORM as f
-        JOIN abandoned_notice as a
-        ON f.abandoned_notice_pk = a.abandoned_notice_pk
-        JOIN animal as animal
-        ON animal.animal_pk = a.abandoned_animal_pk
-        <where>
-            f.roll_pk = #{roll_pk}
-        </where>
+                 JOIN roll as r
+                      ON f.roll_pk = r.roll_pk
+        WHERE roll_id = #{roll_id}
+
     </select>
 
-    <select id="FindByStaff" parameterType="long" >
-        SELECT f.form_pk, f.form_type, f.form_approval, r.roll_id, r.roll_name, r.roll_phone,animal.animal_kind, animal.animal_sex, animal.animal_age,
-        animal.animal_color, animal.animal_feature, animal.animal_breed, animal.animal_neuter, animal.animal_img, a.abandoned_num
+    <select id="FindByStaff" resultMap="result,abandoned_result,shelter_result" parameterType="long" >
+        SELECT *
         FROM FORM as f
-        JOIN abandoned_notice as a
-        ON f.abandoned_notice_pk = a.abandoned_notice_pk
-        JOIN shelter_list as s
-        ON s.shelter_list_pk = a.shelter_list_pk
-        JOIN animal as animal
-        ON animal.animal_pk = a.abandoned_animal_pk
-        <where>
-            s.shelter_pk = #{shelter_pk}
-        </where>
+                 JOIN abandoned_notice as a
+                      ON f.abandoned_notice_pk = a.abandoned_notice_pk
+                 JOIN shelter_list as s
+                      ON s.shelter_list_pk = a.shelter_list_pk
+        WHERE s.shelter_name = #{shelter_list_name}
+
+
     </select>
 
-    <update id="UpdateForm" parameterType="dto.FormDTO">
+    <update id="UpdateForm" parameterType="DB.dto.FormDTO">
         UPDATE FORM
-        SET form_approval=#{form_approval},
-        WHERE form_pk= #{form_pk}
+        SET form_approval = #{form_approval}
+        WHERE form_pk = #{form_pk}
     </update>
 
-    <insert id="InsertForm" parameterType="dto.FormDTO">
+    <update id="UpdateType" parameterType="DB.dto.FormDTO">
+        UPDATE FORM
+        SET form_type = #{form_type}
+        WHERE form_pk = #{form_pk}
+    </update>
+
+    <insert id="InsertForm" parameterType="DB.dto.FormDTO">
         INSERT INTO FORM(roll_pk, abandoned_notice_pk, form_type, form_approval)
         VALUES (#{roll_pk}, #{abandoned_notice_pk}, #{form_type}, #{form_approval})
     </insert>
@@ -89,4 +88,12 @@
         DELETE FROM FORM
         WHERE form_pk = #{form_pk}
     </delete>
+
+    <select id="FindByForm_id" resultMap="result" >
+        SELECT *
+        FROM FORM
+        <where>
+            form_pk = #{form_pk}
+        </where>
+    </select>
 </mapper>

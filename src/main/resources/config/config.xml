@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias alias="Abandoned_notice" type="dto.Abandoned_noticeDTO"/>
-        <typeAlias alias="Animal" type="dto.AnimalDTO"/>
-        <typeAlias alias="Form" type="dto.FormDTO"/>
-        <typeAlias alias="Missing_notice" type="dto.Missing_noticeDTO"/>
+        <typeAlias alias="Abandoned_notice" type="DB.dto.Abandoned_noticeDTO"/>
+        <typeAlias alias="Animal" type="DB.dto.AnimalDTO"/>
+        <typeAlias alias="Form" type="DB.dto.FormDTO"/>
+        <typeAlias alias="Missing_notice" type="DB.dto.Missing_noticeDTO"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">

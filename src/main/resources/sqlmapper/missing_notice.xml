@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.Missing_noticeMapper">
-    <resultMap id="result" type="dto.Missing_noticeDTO">
+    <resultMap id="result" type="DB.dto.Missing_noticeDTO">
         <result property="missing_notice_pk" column="missing_notice_pk"/>
         <result property="missing_animal_pk" column="missing_animal_pk"/>
         <result property="missing_person_name" column="missing_person_name"/>
@@ -10,7 +10,7 @@
         <result property="missing_date" column="missing_date"/>
         <result property="missing_place" column="missing_place"/>
     </resultMap>
-    <resultMap id="animalResult" type="dto.AnimalDTO">
+    <resultMap id="animal_result" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -22,11 +22,12 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="ReadAll" resultMap="result">
+    <select id="ReadAll" resultMap="result,animal_result">
         SELECT *
         FROM MISSING_NOTICE as missing
                  JOIN ANIMAL as animal
                       on missing.missing_animal_pk = animal.animal_pk
+
     </select>
 
     <select id="FindByOption" resultMap="result">
@@ -39,7 +40,17 @@
         </where>
     </select>
 
-    <update id="UpdateMissing" parameterType="dto.Missing_noticeDTO">
+    <select id="FindByPk" resultMap="result">
+        SELECT *
+        FROM MISSING_NOTICE as missing
+        JOIN ANIMAL as animal
+        on missing.missing_animal_pk = animal.animal_pk
+        <where>
+            missing_notice_pk = #{missing_notice_pk}
+        </where>
+    </select>
+
+    <update id="UpdateMissing" parameterType="DB.dto.Missing_noticeDTO">
         UPDATE MISSING_NOTICE
         SET missing_person_name=#{missing_person_name},
             missing_animal_name=#{missing_animal_name},
@@ -52,7 +63,7 @@
             WHERE missing_notice_pk= #{missing_notice_pk}
     </update>
 
-    <insert id="InsertMissing" parameterType="dto.Missing_noticeDTO">
+    <insert id="InsertMissing" parameterType="DB.dto.Missing_noticeDTO">
         INSERT INTO MISSING_NOTICE(missing_animal_pk,missing_person_name, missing_animal_name, missing_email, missing_phone, missing_date, missing_county
         , missing_city, missing_address)
         VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}

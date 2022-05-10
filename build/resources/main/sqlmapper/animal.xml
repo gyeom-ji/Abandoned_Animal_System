@@ -31,6 +31,17 @@
         VALUES (#{animal_kind}, #{animal_sex}, #{animal_age}, #{animal_color}, #{animal_feature}, #{animal_breed}, #{animal_neuter}, #{animal_img})
     </insert>
 
+    <select id="SelectAnimalOption" resultMap="result" resultType="long">
+        select *
+        from ANIMAL
+        where animal_pk = #{animal_pk}
+    </select>
+
+    <select id="SelectAnimalAll" resultMap="result">
+        select *
+        from ANIMAL
+    </select>
+
     <delete id="RemoveAnimal" parameterType="long" >
         DELETE FROM ANIMAL
         WHERE animal_pk = #{animal_pk}

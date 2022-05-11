@@ -61,6 +61,7 @@ public class AnimalDAO {
 
     public long InsertAnimal(AnimalDTO animalDTO)
     {
+        long pk = 0;
         SqlSession session = null;
         long pk = 0;
         try {

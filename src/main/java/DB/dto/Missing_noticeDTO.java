@@ -10,6 +10,8 @@ import java.util.Date;
 @Setter
 @ToString
 public class Missing_noticeDTO {
+    private AnimalDTO animalDTO;
+
     private long missing_notice_pk;
     private long missing_animal_pk;
     private String missing_person_name;

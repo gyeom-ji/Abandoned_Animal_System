@@ -1,6 +1,7 @@
 package DB.dao;
 
 import DB.dto.RollDTO;
+import DB.dto.Shelter_listDTO;
 import DB.mapper.RollSql;
 import org.apache.ibatis.annotations.*;
 
@@ -20,7 +21,8 @@ public interface IRollDAO {
 
     //계정 정보 입력
     @Insert("insert into roll (roll_id, roll_pw, roll_name, roll_phone, roll_type) values( #{roll_id}, #{roll_pw}, #{roll_name}, #{roll_phone}, #{roll_type})")
-    void insert_Roll(RollDTO rollDTO);
+    @SelectKey(keyColumn="roll_pk", keyProperty="roll_pk", resultType=long.class, before=false, statement="select last_insert_id()")
+    long insert_Roll(RollDTO rollDTO);
 
     //계정 정보 수정 (
     @Update("update roll set roll_pw = #{roll_pw}, roll_name = #{roll_name}, roll_phone = #{roll_phone} where roll_id = #{roll_id} ")

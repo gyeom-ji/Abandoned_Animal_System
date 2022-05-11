@@ -1,5 +1,6 @@
 package DB.dao;
 
+import DB.dto.AnimalDTO;
 import DB.dto.RollDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -12,14 +13,16 @@ public class RollDAO {
     public RollDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}
 
     //계정 정보 입력
-    public void insert_Roll(RollDTO rollDTO) {
+    public long insert_Roll(RollDTO rollDTO) {
+        long pk = 0;
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IRollDAO.class).insert_Roll(rollDTO);
+            pk = session.getMapper(IRollDAO.class).insert_Roll(rollDTO);
             session.commit();
         } finally {
             session.close();
         }
+        return pk;
     }
 
     //계정 정보 수정

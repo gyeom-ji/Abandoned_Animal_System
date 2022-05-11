@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class VaccineDTO {
+    private  FormDTO formDTO;
     private long vaccine_pk;
     private String vaccine_name;
     private String vaccine_basic;

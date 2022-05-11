@@ -18,7 +18,9 @@ public class Recommend_materialsDAO {
     //추천상품 정보 입력
     public void insert_Recommend_materials(Recommend_materialsDTO recommend_materialsDTO) {
         SqlSession session = sqlSessionFactory.openSession();
+        long form_pk = recommend_materialsDTO.getFormDTO().getForm_pk();
         try {
+            recommend_materialsDTO.getFormDTO().setForm_pk(form_pk);
             session.getMapper(IRecommend_materialsDAO.class).insert_Recommend_materials(recommend_materialsDTO);
             session.commit();
         } finally {

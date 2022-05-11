@@ -1,5 +1,6 @@
 package DB.dao;
 
+import DB.dto.RollDTO;
 import DB.dto.Shelter_listDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -66,14 +67,16 @@ public class Shelter_listDAO {
     }
 
     //보호소 정보 입력
-    public void insert_Shelter_list(Shelter_listDTO shelter_listDTO) {
+    public long insert_Shelter_list(Shelter_listDTO shelter_listDTO) {
+        long pk = 0;
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            session.getMapper(IShelter_listDAO.class).insert_Shelter_list(shelter_listDTO);
+            pk = session.getMapper(IShelter_listDAO.class).insert_Shelter_list(shelter_listDTO);
             session.commit();
         } finally {
             session.close();
         }
+        return pk;
     }
 
     //보호소 정보 수정

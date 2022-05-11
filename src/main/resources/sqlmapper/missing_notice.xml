@@ -65,9 +65,14 @@
 
     <insert id="InsertMissing" parameterType="DB.dto.Missing_noticeDTO">
         INSERT INTO MISSING_NOTICE(missing_animal_pk,missing_person_name, missing_animal_name, missing_email, missing_phone, missing_date, missing_county
+                                  , missing_city, missing_address)
+        VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}
+               ,#{missing_city}, #{missing_address})
+INSERT INTO MISSING_NOTICE(missing_animal_pk,missing_person_name, missing_animal_name, missing_email, missing_phone, missing_date, missing_county
         , missing_city, missing_address)
         VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}
         ,#{missing_city}, #{missing_address})
+
     </insert>
 
     <delete id="RemoveMissing" parameterType="long" >

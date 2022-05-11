@@ -59,16 +59,18 @@ public class AnimalDAO {
         }
     }
 
-    public void InsertAnimal(AnimalDTO animalDTO)
+    public long InsertAnimal(AnimalDTO animalDTO)
     {
         SqlSession session = null;
+        long pk = 0;
         try {
             session = sqlSessionFactory.openSession(true);
-            session.insert("mapper.AnimalMapper.InsertAnimal", animalDTO);
+            pk = session.insert("mapper.AnimalMapper.InsertAnimal", animalDTO);
             session.commit();
         } finally {
             session.close();
         }
+        return pk;
     }
 
     public void RemoveAnimal(long id) {

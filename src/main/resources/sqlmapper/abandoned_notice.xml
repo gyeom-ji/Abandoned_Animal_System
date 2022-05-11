@@ -66,12 +66,19 @@
         WHERE abandoned_notice_num = #{abandoned_notice_num}
     </delete>
 
-
     <select id="FindByAbandoned_notice_num" resultMap="result" >
         SELECT *
         FROM ABANDONED_NOTICE
         <where>
             abandoned_notice_num = #{abandoned_notice_num}
+        </where>
+    </select>
+
+    <select id="FindByID" resultMap="long" >
+        SELECT *
+        FROM ABANDONED_NOTICE
+        <where>
+            abandoned_notice_pk = #{abandoned_notice_pk}
         </where>
     </select>
 </mapper>

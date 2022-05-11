@@ -34,7 +34,7 @@ public interface IRollDAO {
     @ResultMap("rollResultSet")
     List<RollDTO> select_Roll(String roll_id);
 
-    @Select("select from roll where roll_id=#{roll_id")
+    @Select("select * from roll where roll_id=#{roll_id")
     RollDTO select(String roll_id);
 
 

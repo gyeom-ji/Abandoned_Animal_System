@@ -10,11 +10,15 @@ import java.util.Date;
 @Setter
 @ToString
 public class Abandoned_noticeDTO {
-    private int abandoned_notice_pk;
-    private int abandoned_animal_pk;
-    private int shelter_list_pk;
+    private long abandoned_notice_pk;
+    private long abandoned_animal_pk;
+    private long shelter_list_pk;
     private String abandoned_notice_num;
     private String abandoned_receipt_date;
     private String abandoned_place;
     private String abandoned_period;
+
+    private AnimalDTO animalDTO;
+    private Shelter_listDTO shelter_listDTO;
+
 }

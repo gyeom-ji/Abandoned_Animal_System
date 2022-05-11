@@ -2,17 +2,25 @@ package DB.dao;
 
 import DB.dto.Abandoned_noticeDTO;
 import DB.dto.FormDTO;
+import DB.dto.RollDTO;
+import DB.dto.Shelter_listDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
 public class FormDAO {
-
     private SqlSessionFactory sqlSessionFactory = null;
+    private RollDAO rollDAO;
+    private Shelter_listDAO shelter_listDAO;
+    private Abandoned_noticeDAO abandoned_noticeDAO;
 
-    public FormDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}
-
+    public FormDAO(RollDAO rollDAO, Shelter_listDAO shelter_listDAO, Abandoned_noticeDAO abandoned_noticeDAO, SqlSessionFactory sqlSessionFactory) {
+        this.rollDAO = rollDAO;
+        this.shelter_listDAO = shelter_listDAO;
+        this.abandoned_noticeDAO = abandoned_noticeDAO;
+        this.sqlSessionFactory = sqlSessionFactory;
+    }
     public List<FormDTO> FindByMember(String roll_id)
     {
         List<FormDTO> list = null;
@@ -67,6 +75,12 @@ public class FormDAO {
     public void InsertForm(FormDTO formDTO)
     {
         SqlSession session = null;
+        String id = formDTO.getRollDTO().getRoll_id();
+        RollDTO rollDTO = rollDAO.select(id);
+        formDTO.getRollDTO().setRoll_pk(rollDTO.getRoll_pk());
+        long abandoned = formDTO.getAbandoned_noticeDTO().getAbandoned_notice_pk();
+        Abandoned_noticeDTO abandoned_noticeDTO = abandoned_noticeDAO.FindByID(abandoned);
+        formDTO.getAbandoned_noticeDTO().setAbandoned_notice_pk(abandoned_noticeDTO.getAbandoned_notice_pk());
         try {
             session = sqlSessionFactory.openSession(true);
             session.insert("mapper.FormMapper.InsertForm", formDTO);

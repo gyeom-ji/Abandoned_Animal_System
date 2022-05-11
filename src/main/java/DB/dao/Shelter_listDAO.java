@@ -99,4 +99,22 @@ public class Shelter_listDAO {
             session.close();
         }
     }
+
+    //유기동물 공고 insert용 select
+    public Shelter_listDTO select_abandoned(String shelter_name, String shelter_phone){
+        Shelter_listDTO shelter_listDTO = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        IShelter_listDAO mapper = session.getMapper(IShelter_listDAO.class);
+        try{
+            shelter_listDTO = mapper.select_abandoned(shelter_name, shelter_phone);
+            session.commit();
+        } catch(Exception e){
+            e.printStackTrace();
+            session.rollback();
+        }
+        finally{
+            session.close();
+        }
+        return shelter_listDTO;
+    }
 }

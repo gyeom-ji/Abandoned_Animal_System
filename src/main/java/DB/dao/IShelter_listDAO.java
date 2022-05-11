@@ -43,6 +43,10 @@ public interface IShelter_listDAO {
     @Delete("delete from shelter_list where shelter_list_pk = #{shelter_list_pk} ")
     void delete_Shelter_list(long id);
 
-    @Select("select from shelter_list where shelter_name=#{shelter_name")
+    @Select("select * from shelter_list where shelter_name=#{shelter_name")
     Shelter_listDTO select(String shelter_name);
+
+    //유기동물 공고 insert용 select
+    @Select("select * from shelter_list where shelter_name=#{shelter_name and where shelter_phone=#{shelter_phone}")
+    Shelter_listDTO select_abandoned(String shelter_name, String shelter_phone);
 }

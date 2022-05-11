@@ -10,8 +10,10 @@ import java.util.Date;
 @Setter
 @ToString
 public class Missing_noticeDTO {
-    private int missing_notice_pk;
-    private int missing_animal_pk;
+    private AnimalDTO animalDTO;
+
+    private long missing_notice_pk;
+    private long missing_animal_pk;
     private String missing_person_name;
     private String missing_animal_name;
     private String missing_email;

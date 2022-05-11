@@ -33,6 +33,7 @@ public class Missing_noticeService {
         missing.setMissing_county(missing_noticeDTO.getMissing_county());
         missing.setMissing_city(missing_noticeDTO.getMissing_city());
         missing.setMissing_address(missing_noticeDTO.getMissing_address());
+        missing.setAnimalDTO(missing_noticeDTO.getAnimalDTO());
 
         //수정된 실종공고 저장
         missing_noticeDAO.UpdateMissing(missing);

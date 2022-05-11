@@ -33,7 +33,8 @@ public interface IShelter_listDAO {
 
     //보호소 정보 입력
     @Insert("insert into shelter_list (shelter_name, shelter_phone, shelter_county, shelter_city, shelter_address, shelter_type, shelter_open_time, shelter_close_time) values( #{shelter_name}, #{shelter_phone}, #{shelter_county}, #{shelter_city}, #{shelter_address}, #{shelter_type}, #{shelter_open_time}, #{shelter_close_time} )")
-    void insert_Shelter_list(Shelter_listDTO shelter_listDTO);
+    @SelectKey(keyColumn="shelter_list_pk", keyProperty="shelter_list_pk", resultType=long.class, before=false, statement="select last_insert_id()")
+    long insert_Shelter_list(Shelter_listDTO shelter_listDTO);
 
     //보호소 정보 수정 (
     @Update("update shelter_list set shelter_name = #{shelter_name}, shelter_phone = #{shelter_phone}, shelter_county = #{shelter_county}, shelter_city = #{shelter_city}, shelter_address = #{shelter_address}, shelter_type = #{shelter_type}, shelter_open_time = #{shelter_open_time}, shelter_close_time = #{shelter_close_time} where shelter_list_pk = #{shelter_list_pk} ")
@@ -43,6 +44,6 @@ public interface IShelter_listDAO {
     @Delete("delete from shelter_list where shelter_list_pk = #{shelter_list_pk} ")
     void delete_Shelter_list(long id);
 
-    @Select("select from shelter_list where shelter_name=#{shelter_name")
+    @Select("select * from shelter_list where shelter_name=#{shelter_name")
     Shelter_listDTO select(String shelter_name);
 }

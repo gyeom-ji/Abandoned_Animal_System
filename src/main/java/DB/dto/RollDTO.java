@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RollDTO {
-    private int roll_pk;
+    private long roll_pk;
     private String roll_id;
     private String roll_pw;
     private String roll_name;

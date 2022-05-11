@@ -10,7 +10,7 @@ import java.sql.Time;
 @Setter
 @ToString
 public class Shelter_listDTO {
-    private int shelter_list_pk;
+    private long shelter_list_pk;
     private String shelter_name;
     private String shelter_phone;
     private String shelter_county;

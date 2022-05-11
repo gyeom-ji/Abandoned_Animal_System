@@ -12,7 +12,7 @@ import java.sql.Blob;
 @Setter
 @ToString
 public class AnimalDTO implements Serializable {
-    private int animal_pk;
+    private long animal_pk;
     private String animal_kind;
     private String animal_sex;
     private String animal_age;

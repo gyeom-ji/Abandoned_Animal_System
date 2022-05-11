@@ -47,9 +47,15 @@
     </update>
 
     <insert id="InsertAnimal" parameterType="DB.dto.AnimalDTO">
+        <selectKey resultType="long" keyProperty="ANIMAL_PK " order="AFTER">
+
+            SELECT LAST_INSERT_ID()
+
+        </selectKey>
         INSERT INTO ANIMAL(animal_kind, animal_sex, animal_age, animal_color, animal_feature, animal_breed, animal_neuter, animal_img)
         VALUES (#{animal_kind}, #{animal_sex}, #{animal_age}, #{animal_color}, #{animal_feature}, #{animal_breed}, #{animal_neuter}, #{animal_img})
     </insert>
+
 
     <select id="SelectAnimalAbandoned" resultMap="result,AbandonedResult" resultType="long">
         select *

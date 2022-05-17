@@ -13,9 +13,9 @@ import java.net.Socket;
 //로그인전에 요청을 수행하는 객체
 public class UndefinedController {
     public static final int USER_UNDEFINED = 0;
-    public static final int ADMIN_TYPE = 1;
-    public static final int STAFF_TYPE = 2;
-    public static final int MEMBER_TYPE = 3;
+    public static final int STAFF_TYPE = 1;
+    public static final int MEMBER_TYPE= 2;
+    public static final int ADMIN_TYPE = 3;
 
     private RollDAO rollDAO;
     private Socket socket;
@@ -57,7 +57,6 @@ public class UndefinedController {
         System.out.println("login entry");
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         RollDTO rollDTO = (RollDTO) recvPt.getObject();
-        // 클라이언트로부터 받은 accountDTO로 로그인
         try{
             RollService rollService = new RollService(rollDAO);
             RollDTO loginRollDTO= rollService.login(rollDTO);
@@ -67,7 +66,6 @@ public class UndefinedController {
             sendPt.setObject(loginRollDTO);
             sendPt.send(os);
 
-            // return userType
             if(loginRollDTO.getRoll_id().charAt(0) == '#'){
                 return ADMIN_TYPE;
             }else if(loginRollDTO.getRoll_id().charAt(0) == '@'){
@@ -75,6 +73,7 @@ public class UndefinedController {
             }else{
                 return MEMBER_TYPE;
             }
+
         }catch(IllegalArgumentException e){
             // 로그인 실패 - 실패 메시지 전송
             sendPt.setCode(Protocol.T2_CODE_FAIL);
@@ -90,10 +89,6 @@ public class UndefinedController {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
         try{
-            if(recvPt.getEntity() != Protocol.ENTITY_ADMIN){
-                throw new IllegalArgumentException("직원만 생성가능");
-            }
-            // 클라이언트로부터 받은 adminDTO로 관리자 계정 생성
             RollDTO dto = (RollDTO) recvPt.getObject();
             if(dto.getRoll_id().charAt(0) == '#'){
                 dto.setRoll_type("관리자");

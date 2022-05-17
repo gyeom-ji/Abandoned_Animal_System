@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 public class StaffController implements DefinedController {
     public static final int USER_UNDEFINED = 0;
-    public static final int ADMIN_TYPE = 3;
+    public static final int STAFF_TYPE = 1;
 
     private final Abandoned_noticeDAO abandoned_noticeDAO;
     private final AnimalDAO animalDAO;
@@ -79,7 +79,7 @@ public class StaffController implements DefinedController {
                 return USER_UNDEFINED;  // 로그아웃요청이 왔을 땐 userType을 USER_UNDEFINED로 지정
             default:
         }
-        return ADMIN_TYPE;
+        return STAFF_TYPE;
     }
 
     // 로그아웃 요청이 왔을 때 수행할 일

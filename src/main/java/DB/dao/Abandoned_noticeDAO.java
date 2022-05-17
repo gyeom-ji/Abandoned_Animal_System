@@ -3,12 +3,11 @@ package DB.dao;
 import DB.dto.Abandoned_noticeDTO;
 import DB.dto.Shelter_listDTO;
 import DB.mapper.MyBatisConnectionFactory;
-import DB.repository.Abandoned_noticeRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.List;
 
-public class Abandoned_noticeDAO implements Abandoned_noticeRepository{
+public class Abandoned_noticeDAO{
     private SqlSessionFactory sqlSessionFactory = null;
     private AnimalDAO animalDAO;
     private Shelter_listDAO shelter_listDAO;

@@ -14,9 +14,9 @@ import java.net.Socket;
 public class MainController extends Thread {
     // USER 구분
     public static final int USER_UNDEFINED = 0;
-    public static final int ADMIN_TYPE = 1;
-    public static final int STAFF_TYPE = 2;
-    public static final int MEMBER_TYPE = 3;
+    public static final int STAFF_TYPE = 1;
+    public static final int MEMBER_TYPE= 2;
+    public static final int ADMIN_TYPE = 3;
     private int userType;
 
     private int clientID;   // client port 번호

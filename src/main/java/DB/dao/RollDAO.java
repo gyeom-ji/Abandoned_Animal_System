@@ -2,13 +2,12 @@ package DB.dao;
 
 import DB.dto.AnimalDTO;
 import DB.dto.RollDTO;
-import DB.repository.RollRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class RollDAO implements RollRepository {
+public class RollDAO{
     private SqlSessionFactory sqlSessionFactory = null;
 
     public RollDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}

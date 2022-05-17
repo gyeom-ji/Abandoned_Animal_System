@@ -2,13 +2,12 @@ package DB.dao;
 
 import DB.dto.RollDTO;
 import DB.dto.Shelter_listDTO;
-import DB.repository.Shelter_listRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class Shelter_listDAO implements Shelter_listRepository {
+public class Shelter_listDAO{
     private SqlSessionFactory sqlSessionFactory = null;
 
     public Shelter_listDAO(SqlSessionFactory sqlSessionFactory){

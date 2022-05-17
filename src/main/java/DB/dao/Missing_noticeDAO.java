@@ -2,13 +2,12 @@ package DB.dao;
 
 import DB.dto.Missing_noticeDTO;
 import DB.mapper.MyBatisConnectionFactory;
-import DB.repository.Missing_noticeRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class Missing_noticeDAO implements Missing_noticeRepository {
+public class Missing_noticeDAO {
     private SqlSessionFactory sqlSessionFactory = null;
     private AnimalDAO animalDAO = new AnimalDAO(MyBatisConnectionFactory.getSqlSessionFactory());
 

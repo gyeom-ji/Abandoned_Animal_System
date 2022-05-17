@@ -3,13 +3,12 @@ package DB.dao;
 import DB.dto.FormDTO;
 import DB.dto.Recommend_materialsDTO;
 import DB.dto.Shelter_listDTO;
-import DB.repository.Recommend_materialsRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class Recommend_materialsDAO implements Recommend_materialsRepository {
+public class Recommend_materialsDAO{
     private SqlSessionFactory sqlSessionFactory = null;
 
     public Recommend_materialsDAO(SqlSessionFactory sqlSessionFactory) {

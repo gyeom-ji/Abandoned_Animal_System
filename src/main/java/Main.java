@@ -1,3 +1,5 @@
+import client.Login;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -9,16 +11,15 @@ public class Main {
         int port = 3306;
         try {
             Socket socket = new Socket(address, port);
-            InputStream is = socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
-
-//            Animal_Client program = new Animal_Client(is, os);
-//            program.run();
+            Login login = new Login();
+            Login.run(address,port);
             socket.close();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

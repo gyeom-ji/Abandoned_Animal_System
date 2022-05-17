@@ -40,10 +40,12 @@ public class AdminService implements LoginService {
 
     public void run() throws Exception {
         int menu = 0;
-        while (menu != 8) {
+        boolean exit = true;
+        while (exit) {
             System.out.println("[1] 상품 생성  [2]백신 생성  [3]내 정보  [4]실종동물 공고 조회" +
                     "\n[5]유기동물 공고 조회  [6]유기동물보호소 조회  [7]상품 조회 [8]백신 조회" +
-                    "\n[9]내 정보 변경 [10]상품 정보 변경 [11]백신 정보 변경");
+                    "\n[9]내 정보 변경 [10]상품 정보 변경 [11]백신 정보 변경 [12]백신 삭제" +
+                    "\n[13]상품 삭제 [14]실종공고 삭제 [15]유기동물 공고 삭제 [16]로그아웃");
             menu = scanner.nextInt();
             switch (menu) {
                 case 1:
@@ -90,6 +92,10 @@ public class AdminService implements LoginService {
                     break;
                 case 15:
                     deleteAbandonedAnimalNotice();
+                    break;
+                case 16:
+                    logout();
+                    exit = false;
                     break;
                 default:
                     System.out.println("잘못된 번호를 입력하셨습니다");
@@ -376,7 +382,6 @@ public class AdminService implements LoginService {
                                 System.out.println("abandoned notice num : " + abandoned_noticeDTO[i].getAbandoned_notice_num());
                                 System.out.println("abandoned notice receipt date : " + abandoned_noticeDTO[i].getAbandoned_receipt_date());
                                 System.out.println("abandoned notice place : " + abandoned_noticeDTO[i].getAbandoned_place());
-                                System.out.println("abandoned notice period : " + abandoned_noticeDTO[i].getAbandoned_period());
                                 System.out.println("shelter pk : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_list_pk());
                                 System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_name())
                                 ;
@@ -430,7 +435,6 @@ public class AdminService implements LoginService {
                                 System.out.println("abandoned notice num : " + abandoned_noticeDTO[i].getAbandoned_notice_num());
                                 System.out.println("abandoned notice receipt date : " + abandoned_noticeDTO[i].getAbandoned_receipt_date());
                                 System.out.println("abandoned notice place : " + abandoned_noticeDTO[i].getAbandoned_place());
-                                System.out.println("abandoned notice period : " + abandoned_noticeDTO[i].getAbandoned_period());
                                 System.out.println("shelter pk : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_list_pk());
                                 System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_name());
                                 System.out.println("shelter phone : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_phone());
@@ -790,6 +794,22 @@ public class AdminService implements LoginService {
         sendPt.setObject(notice_num);
         sendPt.setCode(Protocol.T1_CODE_DELETE);
         sendPt.setEntity(Protocol.ENTITY_ABANDONED_ANIMAL_NOTICE);
+        sendPt.send(os);
+
+        Protocol recvPt = read();
+        if (recvPt != null) {
+            if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
+                if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS)
+                    System.out.println("성공");
+                else if (recvPt.getCode() == Protocol.T2_CODE_FAIL)
+                    System.out.println("실패");
+            }
+        }
+    }
+
+    private void logout() throws Exception {
+        Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
+        sendPt.setCode(Protocol.T1_CODE_LOGOUT);
         sendPt.send(os);
 
         Protocol recvPt = read();

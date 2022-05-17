@@ -16,7 +16,6 @@ public class Abandoned_noticeDTO {
     private String abandoned_notice_num;
     private String abandoned_receipt_date;
     private String abandoned_place;
-    private String abandoned_period;
 
     private AnimalDTO animalDTO;
     private Shelter_listDTO shelter_listDTO;

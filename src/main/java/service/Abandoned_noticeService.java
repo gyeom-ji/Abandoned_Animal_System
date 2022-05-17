@@ -28,7 +28,6 @@ public class Abandoned_noticeService {
         abandoned.setAbandoned_notice_num(abandoned_noticeDTO.getAbandoned_notice_num());
         abandoned.setAbandoned_receipt_date(abandoned_noticeDTO.getAbandoned_receipt_date());
         abandoned.setAbandoned_place(abandoned_noticeDTO.getAbandoned_place());
-        abandoned.setAbandoned_period(abandoned_noticeDTO.getAbandoned_period());
 
         //수정된 유기공고 저장
         abandoned_noticeDAO.UpdateAbandoned(abandoned);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.AnimalMapper">
-    <resultMap id="result" type="dto.AnimalDTO">
+    <resultMap id="result" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -13,7 +13,27 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <update id="UpdateAnimal" parameterType="dto.AnimalDTO">
+    <resultMap id="AbandonedResult" type="DB.dto.Abandoned_noticeDTO">
+        <result property="abandoned_notice_pk" column="abandoned_notice_pk"/>
+        <result property="abandoned_animal_pk" column="abandoned_animal_pk"/>
+        <result property="shelter_list_pk" column="shelter_list_pk"/>
+        <result property="abandoned_notice_num" column="abandoned_notice_num"/>
+        <result property="abandoned_receipt_date" column="abandoned_receipt_date"/>
+        <result property="abandoned_place" column="abandoned_place"/>
+        <result property="abandoned_period" column="abandoned_period"/>
+    </resultMap>
+
+    <resultMap id="MissingResult" type="DB.dto.Missing_noticeDTO">
+        <result property="missing_notice_pk" column="missing_notice_pk"/>
+        <result property="missing_animal_pk" column="missing_animal_pk"/>
+        <result property="missing_person_name" column="missing_person_name"/>
+        <result property="missing_email" column="missing_email"/>
+        <result property="missing_phone" column="missing_phone"/>
+        <result property="missing_date" column="missing_date"/>
+        <result property="missing_place" column="missing_place"/>
+    </resultMap>
+
+    <update id="UpdateAnimal" parameterType="DB.dto.AnimalDTO">
         UPDATE ANIMAL
         SET animal_kind=#{animal_kind},
             animal_sex=#{animal_sex},
@@ -26,15 +46,29 @@
             WHERE animal_pk= #{animal_pk}
     </update>
 
-    <insert id="InsertAnimal" parameterType="dto.AnimalDTO">
+    <insert id="InsertAnimal" parameterType="DB.dto.AnimalDTO">
+        <selectKey resultType="long" keyProperty="ANIMAL_PK " order="AFTER">
+
+            SELECT LAST_INSERT_ID()
+
+        </selectKey>
         INSERT INTO ANIMAL(animal_kind, animal_sex, animal_age, animal_color, animal_feature, animal_breed, animal_neuter, animal_img)
         VALUES (#{animal_kind}, #{animal_sex}, #{animal_age}, #{animal_color}, #{animal_feature}, #{animal_breed}, #{animal_neuter}, #{animal_img})
     </insert>
 
-    <select id="SelectAnimalOption" resultMap="result" resultType="long">
+
+    <select id="SelectAnimalAbandoned" resultMap="result,AbandonedResult" resultType="long">
         select *
-        from ANIMAL
-        where animal_pk = #{animal_pk}
+        from ANIMAL as animal Join ABANDONED_NOTICE as notice
+        ON animal.animal_pk = notice.abandoned_animal_pk
+        where animal.animal_pk = #{animal_pk}
+    </select>
+
+    <select id="SelectAnimalMissing" resultMap="result,MissingResult" resultType="long">
+        select *
+        from ANIMAL as animal Join MISSING_NOTICE as missing
+                                   ON animal.animal_pk = missing.missing_animal_pk
+        where animal.animal_pk = #{animal_pk}
     </select>
 
     <select id="SelectAnimalAll" resultMap="result">

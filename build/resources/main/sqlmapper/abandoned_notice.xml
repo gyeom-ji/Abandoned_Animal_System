@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.Abandoned_noticeMapper">
-    <resultMap id="result" type="dto.Abandoned_noticeDTO">
+    <resultMap id="result" type="DB.dto.Abandoned_noticeDTO">
         <result property="abandoned_notice_pk" column="abandoned_notice_pk"/>
+        <result property="abandoned_animal_pk" column="abandoned_animal_pk"/>
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="abandoned_notice_num" column="abandoned_notice_num"/>
         <result property="abandoned_receipt_date" column="abandoned_receipt_date"/>
         <result property="abandoned_place" column="abandoned_place"/>
         <result property="abandoned_period" column="abandoned_period"/>
     </resultMap>
-    <resultMap id="shelterResult" type="dto.Shelter_listDTO">
+    <resultMap id="shelterResult" type="DB.dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="shelter_name" column="shelter_name"/>
         <result property="shelter_phone" column="shelter_phone"/>
@@ -19,7 +20,7 @@
         <result property="shelter_closetime" column="shelter_closetime"/>
         <result property="shelter_city" column="shelter_city"/>
     </resultMap>
-    <resultMap id="animalResult" type="dto.AnimalDTO">
+    <resultMap id="animalResult" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
         <result property="animal_kind" column="animal_kind"/>
         <result property="animal_sex" column="animal_sex"/>
@@ -46,22 +47,31 @@
         </where>
     </select>
 
-    <update id="UpdateAbandoned" parameterType="dto.Abandoned_noticeDTO">
+    <update id="UpdateAbandoned" parameterType="DB.dto.Abandoned_noticeDTO">
         UPDATE ABANDONED_NOTICE
         SET abandoned_notice_num=#{abandoned_notice_num},
             abandoned_receipt_date=#{abandoned_receipt_date},
             abandoned_place=#{abandoned_place},
             abandoned_period=#{abandoned_period},
-        WHERE abandoned_notice_pk= #{abandoned_notice_pk}
+            WHERE abandoned_notice_num= #{abandoned_notice_num}
     </update>
 
-    <insert id="InsertAbandoned" parameterType="dto.Abandoned_noticeDTO">
+    <insert id="InsertAbandoned" parameterType="DB.dto.Abandoned_noticeDTO">
         INSERT INTO ABANDONED_NOTICE(abandoned_animal_pk, shelter_list_pk, abandoned_notice_num, abandoned_receipt_date, abandoned_place, abandoned_period)
         VALUES (#{abandoned_animal_pk},#{shelter_list_pk},#{abandoned_notice_num}, #{abandoned_receipt_date}, #{abandoned_place}, #{abandoned_period})
     </insert>
 
-    <delete id="RemoveAbandoned" parameterType="long" >
+    <delete id="RemoveAbandoned" parameterType="String" >
         DELETE FROM ABANDONED_NOTICE
-        WHERE abandoned_notice_pk = #{abandoned_notice_pk}
+        WHERE abandoned_notice_num = #{abandoned_notice_num}
     </delete>
+
+
+    <select id="FindByAbandoned_notice_num" resultMap="result" >
+        SELECT *
+        FROM ABANDONED_NOTICE
+        <where>
+            abandoned_notice_num = #{abandoned_notice_num}
+        </where>
+    </select>
 </mapper>

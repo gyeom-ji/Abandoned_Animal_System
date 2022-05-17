@@ -21,7 +21,7 @@ public class Server {
     public Server(
             Abandoned_noticeDAO abandoned_noticeDAO, AnimalDAO animalDAO, FormDAO formDAO,
             Missing_noticeDAO missing_noticeDAO, Recommend_materialsDAO recommend_materialsDAO, RollDAO rollDAO,
-            Shelter_listDAO shelter_listDAO, VaccineDAO vaccineDAO,Socket socket){
+            Shelter_listDAO shelter_listDAO, VaccineDAO vaccineDAO){
         this.abandoned_noticeDAO = abandoned_noticeDAO;
         this.animalDAO = animalDAO;
         this.formDAO = formDAO;
@@ -31,7 +31,7 @@ public class Server {
         this.shelter_listDAO = shelter_listDAO;
         this.vaccineDAO = vaccineDAO;
         try{
-            serverSocket = new ServerSocket(3000);
+            serverSocket = new ServerSocket(3306);
             clients = new MainController[50];
             clientCount = 0;
         }catch(Exception e){

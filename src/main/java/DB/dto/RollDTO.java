@@ -15,6 +15,12 @@ public class RollDTO {
     private String roll_phone;
     private String roll_type;
 
+    public RollDTO(){;}
+
+    public RollDTO(String roll_id) {
+        this.roll_id = roll_id;
+    }
+
     public RollDTO(String roll_id, String roll_pw) {
         this.roll_id = roll_id;
         this.roll_pw = roll_pw;

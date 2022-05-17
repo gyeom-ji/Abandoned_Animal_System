@@ -37,7 +37,7 @@ public class UndefinedController {
             switch (recvPt.getCode()) {
                 case Protocol.T1_CODE_LOGIN:   // 로그인 요청
                     return loginReq(recvPt);
-                case Protocol.T1_CODE_CREATE: // 관리자 생성 요청
+                case Protocol.T1_CODE_CREATE: // 생성 요청
                     createRoll(recvPt);
                     return USER_UNDEFINED;
                 case Protocol.T1_CODE_LOGOUT:  // 로그아웃 요청

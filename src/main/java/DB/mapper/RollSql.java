@@ -4,7 +4,7 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class RollSql {
     //계정 id로 정보 조회
-    public String selectShelter_list_place(String roll_id){
+    public String select_Roll(String roll_id){
         SQL sql = new SQL()
                 .SELECT("*")
                 .FROM("roll")

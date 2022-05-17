@@ -40,7 +40,7 @@ public class AdminController implements DefinedController {
             FormDAO formDAO, Missing_noticeDAO missing_noticeDAO,
             Recommend_materialsDAO recommend_materialsDAO, RollDAO rollDAO,
             Shelter_listDAO shelter_listDAO, VaccineDAO vaccineDAO,
-            InputStream is, OutputStream os){
+            InputStream is, OutputStream os) {
         this.abandoned_noticeDAO = abandoned_noticeDAO;
         this.animalDAO = animalDAO;
         this.formDAO = formDAO;
@@ -64,7 +64,7 @@ public class AdminController implements DefinedController {
     }
 
     @Override
-    public int handler(Protocol recvPt) throws Exception  {
+    public int handler(Protocol recvPt) throws Exception {
         // recvPt는 클라이언트로부터 받은 packet
         switch (recvPt.getCode()) { // code로 분류
             case Protocol.T1_CODE_READ:   // 조회
@@ -106,7 +106,7 @@ public class AdminController implements DefinedController {
     }
 
     // 조회 요청
-    private void readReq (Protocol recvPt) throws Exception {
+    private void readReq(Protocol recvPt) throws Exception {
         switch (recvPt.getEntity()) {
             case Protocol.ENTITY_ADMIN:
                 readAdmin(recvPt);       // 직원 조회 요청
@@ -131,9 +131,8 @@ public class AdminController implements DefinedController {
     }
 
     // 변경 요청
-    private void updateReq (Protocol recvPt) throws Exception {
-        switch (recvPt.getEntity())
-        {
+    private void updateReq(Protocol recvPt) throws Exception {
+        switch (recvPt.getEntity()) {
             case Protocol.ENTITY_ADMIN:
                 updateAdmin(recvPt);  // 관리자 정보 수정 요청
                 break;
@@ -148,7 +147,7 @@ public class AdminController implements DefinedController {
     }
 
     // 삭제 요청
-    private void deleteReq (Protocol recvPt) throws Exception {
+    private void deleteReq(Protocol recvPt) throws Exception {
         switch (recvPt.getEntity()) {
             case Protocol.ENTITY_MISSING_NOTICE:
                 deleteMissingNotice(recvPt);   // 실종 공고 삭제 요청
@@ -242,13 +241,13 @@ public class AdminController implements DefinedController {
                 break;
             }
             case Protocol.READ_BY_OPTION: {
-                try{
+                try {
                     String[] options = (String[]) recvPt.getObjectArray();
-                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options[0],options[1]);
+                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options[0], options[1]);
                     sendPt.setObjectArray(missing_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
@@ -260,41 +259,41 @@ public class AdminController implements DefinedController {
     private void readAdmin(Protocol recvPt) throws Exception {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
-        switch(recvPt.getReadOption()){
-            case Protocol.READ_ALL:{    // 전체 조회
-                try{
+        switch (recvPt.getReadOption()) {
+            case Protocol.READ_ALL: {    // 전체 조회
+                try {
                     RollDTO[] rollDTOS = rollService.selectAll();
                     sendPt.setObjectArray(rollDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.setObject(e.getMessage());
                     sendPt.send(os);
                 }
                 break;
             }
-            case Protocol.READ_BY_ID:{  // ID 조회
-                try{
-                    RollDTO rollDTO = (RollDTO) recvPt.getObject();
-                    RollDTO roll = rollService.selectByID(rollDTO.getRoll_id());
+            case Protocol.READ_BY_ID: {  // ID 조회
+                try {
+                    String id = (String) recvPt.getObject();
+                    RollDTO roll = rollService.selectByID(id);
                     sendPt.setObject(roll);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
                 break;
             }
-            case Protocol.READ_BY_OPTION:{  // 타입 조회
-                try{
-                    String type = (String)recvPt.getObject();
+            case Protocol.READ_BY_OPTION: {  // 타입 조회
+                try {
+                    String type = (String) recvPt.getObject();
                     RollDTO[] roll = rollService.selectByType(type);
                     sendPt.setObjectArray(roll);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
@@ -321,13 +320,13 @@ public class AdminController implements DefinedController {
                 break;
             }
             case Protocol.READ_BY_OPTION: {  // 지역으로 조회
-                try{
+                try {
                     String[] options = (String[]) recvPt.getObjectArray();
-                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options[0],options[1]);
+                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options[0], options[1]);
                     sendPt.setObjectArray(abandoned_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
@@ -338,29 +337,28 @@ public class AdminController implements DefinedController {
 
     private void readShelterList(Protocol recvPt) throws Exception {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-        switch(recvPt.getReadOption()){
-            case Protocol.READ_ALL:{    // 전체 조회
-                try{
+        switch (recvPt.getReadOption()) {
+            case Protocol.READ_ALL: {    // 전체 조회
+                try {
                     Shelter_listDTO[] shelter_listDTOS = shelter_listService.selectAll();
                     sendPt.setObjectArray(shelter_listDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.setObject(e.getMessage());
                     sendPt.send(os);
                 }
                 break;
             }
-            case Protocol.READ_BY_OPTION:{  // 옵션으로 조회
-                try{
+            case Protocol.READ_BY_OPTION: {  // 옵션으로 조회
+                try {
                     String[] options = (String[]) recvPt.getObjectArray();
-                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options[0],options[1]);
+                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options[0], options[1]);
                     sendPt.setObjectArray(shelter_listDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
-                }catch(IllegalArgumentException e){
-                    // 생성된 개설교과목 존재하지 않을 경우 - 실패메시지 전송
+                } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
@@ -370,79 +368,41 @@ public class AdminController implements DefinedController {
     }
 
     private void updateVaccine(Protocol recvPt) throws Exception {
-        RollDTO rollDTO = (RollDTO) recvPt.getObject();
-
+        VaccineDTO vaccineDTO = (VaccineDTO) recvPt.getObject();
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
-        switch(recvPt.getReadOption()){
-            case Protocol.UPDATE_ROLL:{
-                try {
-                    rollService.update(rollDTO);
-                    sendPt.setCode(Protocol.T2_CODE_SUCCESS);
-                    sendPt.send(os);
+        try {
+            vaccineService.update_vaccine(vaccineDTO);
+            sendPt.setCode(Protocol.T2_CODE_SUCCESS);
+            sendPt.send(os);
 
-                } catch (IllegalArgumentException e) {
-                    sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.send(os);
-                }
-                break;
-            }
-            case Protocol.UPDATE_PASSWORD:{
-                try {
-                    rollService.changePassword(rollDTO);
-                    sendPt.setCode(Protocol.T2_CODE_SUCCESS);
-                    sendPt.send(os);
-
-                } catch (IllegalArgumentException e) {
-                    sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.send(os);
-                }
-                break;
-            }
+        } catch (IllegalArgumentException e) {
+            sendPt.setCode(Protocol.T2_CODE_FAIL);
+            sendPt.send(os);
         }
     }
 
     private void updateMaterials(Protocol recvPt) throws Exception {
-        RollDTO rollDTO = (RollDTO) recvPt.getObject();
-
+        Recommend_materialsDTO recommend_materialsDTO = (Recommend_materialsDTO) recvPt.getObject();
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
-        switch(recvPt.getReadOption()){
-            case Protocol.UPDATE_ROLL:{
-                try {
-                    rollService.update(rollDTO);
-                    sendPt.setCode(Protocol.T2_CODE_SUCCESS);
-                    sendPt.send(os);
+        try {
+            recommend_materialsService.update_recommend(recommend_materialsDTO);
+            sendPt.setCode(Protocol.T2_CODE_SUCCESS);
+            sendPt.send(os);
 
-                } catch (IllegalArgumentException e) {
-                    sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.send(os);
-                }
-                break;
-            }
-            case Protocol.UPDATE_PASSWORD:{
-                try {
-                    rollService.changePassword(rollDTO);
-                    sendPt.setCode(Protocol.T2_CODE_SUCCESS);
-                    sendPt.send(os);
-
-                } catch (IllegalArgumentException e) {
-                    sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.send(os);
-                }
-                break;
-            }
+        } catch (IllegalArgumentException e) {
+            sendPt.setCode(Protocol.T2_CODE_FAIL);
+            sendPt.send(os);
         }
     }
 
     private void updateAdmin(Protocol recvPt) throws Exception {
         RollDTO rollDTO = (RollDTO) recvPt.getObject();
-
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
-
-        switch(recvPt.getReadOption()){
-            case Protocol.UPDATE_ROLL:{    // 전화번호, 이름 수정
+        switch (recvPt.getReadOption()) {
+            case Protocol.UPDATE_ROLL: {    // 전화번호, 이름 수정
                 try {
                     rollService.update(rollDTO);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
@@ -454,7 +414,7 @@ public class AdminController implements DefinedController {
                 }
                 break;
             }
-            case Protocol.UPDATE_PASSWORD:{  // 비밀번호 수정
+            case Protocol.UPDATE_PASSWORD: {  // 비밀번호 수정
                 try {
                     rollService.changePassword(rollDTO);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);

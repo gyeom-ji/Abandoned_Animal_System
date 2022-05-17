@@ -2,12 +2,13 @@ package DB.dao;
 
 import DB.dto.RollDTO;
 import DB.dto.Shelter_listDTO;
+import DB.repository.Shelter_listRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class Shelter_listDAO {
+public class Shelter_listDAO implements Shelter_listRepository {
     private SqlSessionFactory sqlSessionFactory = null;
 
     public Shelter_listDAO(SqlSessionFactory sqlSessionFactory){
@@ -101,5 +102,23 @@ public class Shelter_listDAO {
         finally {
             session.close();
         }
+    }
+
+    //유기동물 공고 insert용 select
+    public Shelter_listDTO select_abandoned(String shelter_name, String shelter_phone){
+        Shelter_listDTO shelter_listDTO = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        IShelter_listDAO mapper = session.getMapper(IShelter_listDAO.class);
+        try{
+            shelter_listDTO = mapper.select_abandoned(shelter_name, shelter_phone);
+            session.commit();
+        } catch(Exception e){
+            e.printStackTrace();
+            session.rollback();
+        }
+        finally{
+            session.close();
+        }
+        return shelter_listDTO;
     }
 }

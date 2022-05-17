@@ -33,7 +33,6 @@ public interface IShelter_listDAO {
 
     //보호소 정보 입력
     @Insert("insert into shelter_list (shelter_name, shelter_phone, shelter_county, shelter_city, shelter_address, shelter_type, shelter_open_time, shelter_close_time) values( #{shelter_name}, #{shelter_phone}, #{shelter_county}, #{shelter_city}, #{shelter_address}, #{shelter_type}, #{shelter_open_time}, #{shelter_close_time} )")
-    @SelectKey(keyColumn="shelter_list_pk", keyProperty="shelter_list_pk", resultType=long.class, before=false, statement="select last_insert_id()")
     long insert_Shelter_list(Shelter_listDTO shelter_listDTO);
 
     //보호소 정보 수정 (
@@ -46,4 +45,8 @@ public interface IShelter_listDAO {
 
     @Select("select * from shelter_list where shelter_name=#{shelter_name")
     Shelter_listDTO select(String shelter_name);
+
+    //유기동물 공고 insert용 select
+    @Select("select * from shelter_list where shelter_name=#{shelter_name and where shelter_phone=#{shelter_phone}")
+    Shelter_listDTO select_abandoned(String shelter_name, String shelter_phone);
 }

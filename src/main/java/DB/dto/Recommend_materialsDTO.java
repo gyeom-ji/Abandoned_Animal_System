@@ -10,8 +10,6 @@ import java.awt.*;
 @Setter
 @ToString
 public class Recommend_materialsDTO {
-    private  FormDTO formDTO;
-
     private long recommended_materials_pk;
     private String materials_name;
     private String materials_type;
@@ -21,6 +19,5 @@ public class Recommend_materialsDTO {
     private String materials_animal_kind;
     private String materials_animal_breed;
     private String materials_animal_age;
-    private long materials_form_pk;
 
 }

@@ -2,11 +2,12 @@ package DB.dao;
 
 import DB.dto.Abandoned_noticeDTO;
 import DB.dto.AnimalDTO;
+import DB.repository.AnimalRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.List;
 
-public class AnimalDAO {
+public class AnimalDAO implements AnimalRepository {
     private SqlSessionFactory sqlSessionFactory = null;
 
     public AnimalDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}

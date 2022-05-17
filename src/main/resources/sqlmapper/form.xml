@@ -51,18 +51,24 @@
         FROM FORM as f
                  JOIN roll as r
                       ON f.roll_pk = r.roll_pk
-        WHERE roll_id = #{roll_id}
+                 JOIN abandoned_notice as a
+                      ON f.abandoned_notice_pk = a.abandoned_notice_pk
+                 JOIN shelter_list as s
+                      ON s.shelter_list_pk = a.shelter_list_pk
+        WHERE r.roll_id = #{roll_id}
 
     </select>
 
     <select id="FindByStaff" resultMap="result,abandoned_result,shelter_result" parameterType="long" >
         SELECT *
         FROM FORM as f
+                 JOIN roll as r
+                      ON f.roll_pk = r.roll_pk
                  JOIN abandoned_notice as a
                       ON f.abandoned_notice_pk = a.abandoned_notice_pk
                  JOIN shelter_list as s
                       ON s.shelter_list_pk = a.shelter_list_pk
-        WHERE s.shelter_name = #{shelter_list_name}
+        WHERE s.shelter_name = #{shelter_name}
 
 
     </select>

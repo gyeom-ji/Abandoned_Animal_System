@@ -4,12 +4,13 @@ import DB.dto.FormDTO;
 import DB.dto.Recommend_materialsDTO;
 import DB.dto.VaccineDTO;
 import DB.mapper.MyBatisConnectionFactory;
+import DB.repository.VaccineRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class VaccineDAO {
+public class VaccineDAO implements VaccineRepository {
     private SqlSessionFactory sqlSessionFactory = null;
 
     public VaccineDAO(SqlSessionFactory sqlSessionFactory) {
@@ -19,9 +20,7 @@ public class VaccineDAO {
     //백신 정보 입력
     public void insert_Vaccine(VaccineDTO vaccineDTO) {
         SqlSession session = sqlSessionFactory.openSession();
-        long form_pk = vaccineDTO.getFormDTO().getForm_pk();
         try {
-            vaccineDTO.setVaccine_form_pk(form_pk);
             session.getMapper(IVaccineDAO.class).insert_Vaccine(vaccineDTO);
             session.commit();
         } finally {

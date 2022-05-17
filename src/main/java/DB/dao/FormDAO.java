@@ -4,12 +4,13 @@ import DB.dto.Abandoned_noticeDTO;
 import DB.dto.FormDTO;
 import DB.dto.RollDTO;
 import DB.dto.Shelter_listDTO;
+import DB.repository.FormRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
-public class FormDAO {
+public class FormDAO implements FormRepository {
     private SqlSessionFactory sqlSessionFactory = null;
     private RollDAO rollDAO;
     private Shelter_listDAO shelter_listDAO;

@@ -1,38 +1,44 @@
 package network;
 
 import DB.dao.*;
+import DB.mapper.MyBatisConnectionFactory;
 import controller.MainController;
 ;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 //각 클라이언트와 TCP통신을 연결하고, 쓰레드를 생성하는 객체
 public class Server {
-    private final Abandoned_noticeDAO abandoned_noticeDAO;
     private final AnimalDAO animalDAO;
+    private final Shelter_listDAO shelter_listDAO;
+    private final Abandoned_noticeDAO abandoned_noticeDAO;
+    private final RollDAO rollDAO;
     private final FormDAO formDAO;
     private final Missing_noticeDAO missing_noticeDAO;
     private final Recommend_materialsDAO recommend_materialsDAO;
-    private final RollDAO rollDAO;
-    private final Shelter_listDAO shelter_listDAO;
     private final VaccineDAO vaccineDAO;
 
     public Server(
-            Abandoned_noticeDAO abandoned_noticeDAO, AnimalDAO animalDAO, FormDAO formDAO,
-            Missing_noticeDAO missing_noticeDAO, Recommend_materialsDAO recommend_materialsDAO, RollDAO rollDAO,
-            Shelter_listDAO shelter_listDAO, VaccineDAO vaccineDAO,Socket socket){
-        this.abandoned_noticeDAO = abandoned_noticeDAO;
+            AnimalDAO animalDAO, Shelter_listDAO shelter_listDAO, Abandoned_noticeDAO abandoned_noticeDAO,
+            RollDAO rollDAO, FormDAO formDAO, Missing_noticeDAO missing_noticeDAO,
+            Recommend_materialsDAO recommend_materialsDAO, VaccineDAO vaccineDAO){
         this.animalDAO = animalDAO;
+        this.shelter_listDAO = shelter_listDAO;
+        this.abandoned_noticeDAO = abandoned_noticeDAO;
+        this.rollDAO = rollDAO;
         this.formDAO = formDAO;
         this.missing_noticeDAO = missing_noticeDAO;
         this.recommend_materialsDAO = recommend_materialsDAO;
-        this.rollDAO = rollDAO;
-        this.shelter_listDAO = shelter_listDAO;
         this.vaccineDAO = vaccineDAO;
+
         try{
             serverSocket = new ServerSocket(3000);
-            clients = new MainController[50];
+            clients = new MainController[200];
             clientCount = 0;
         }catch(Exception e){
             e.getStackTrace();

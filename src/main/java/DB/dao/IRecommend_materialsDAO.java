@@ -16,7 +16,6 @@ public interface IRecommend_materialsDAO {
             @Result(property = "materials_url", column = "materials_url"),
             @Result(property = "materials_feature", column = "materials_feature"),
             @Result(property = "materials_img", column = "materials_img"),
-            @Result(property = "materials_form_pk", column = "materials_form_pk"),
             @Result(property = "materials_animal_kind", column = "materials_animal_kind"),
             @Result(property = "materials_animal_breed", column = "materials_animal_breed"),
             @Result(property = "materials_animal_age", column = "materials_animal_age")
@@ -24,8 +23,8 @@ public interface IRecommend_materialsDAO {
     List<Recommend_materialsDTO> getAll();
 
     //추천상품 정보 입력
-    @Insert("insert into recommend_materials (materials_name, materials_type, materials_url, materials_feature, materials_img, materials_animal_kind,materials_animal_breed,materials_animal_age,materials_form_pk) " +
-            "values( #{materials_name}, #{materials_type}, #{materials_url}, #{materials_feature}, #{materials_img},  #{materials_animal_kind}, #{materials_animal_breed}, #{materials_animal_age}, #{materials_form_pk} )")
+    @Insert("insert into recommend_materials (materials_name, materials_type, materials_url, materials_feature, materials_img, materials_animal_kind,materials_animal_breed,materials_animal_age " +
+            "values( #{materials_name}, #{materials_type}, #{materials_url}, #{materials_feature}, #{materials_img},  #{materials_animal_kind}, #{materials_animal_breed}, #{materials_animal_age} )")
     void insert_Recommend_materials(Recommend_materialsDTO recommend_materialsDTO);
 
     //추천상품 정보 수정

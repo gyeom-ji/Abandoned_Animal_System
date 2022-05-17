@@ -91,7 +91,7 @@ public class UndefinedController {
 
         try{
             if(recvPt.getEntity() != Protocol.ENTITY_ADMIN){
-                throw new IllegalArgumentException("교직원만 생성가능");
+                throw new IllegalArgumentException("직원만 생성가능");
             }
             // 클라이언트로부터 받은 adminDTO로 관리자 계정 생성
             RollDTO dto = (RollDTO) recvPt.getObject();

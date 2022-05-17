@@ -49,7 +49,7 @@ public class FormService {
     }
 
     //폼 스태프 조회
-    public FormDTO[]  FindByStaff(String shelter_name) { return formDTO(formDAO.FindByStaff(shelter_name)); }
+    public FormDTO[] FindByStaff(String shelter_name) { return formDTO(formDAO.FindByStaff(shelter_name)); }
 
     private FormDTO[] formDTO(List<FormDTO> list){
         FormDTO[] formDTOS = new FormDTO[list.size()];

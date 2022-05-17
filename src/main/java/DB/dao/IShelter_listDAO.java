@@ -33,7 +33,7 @@ public interface IShelter_listDAO {
 
     //보호소 정보 입력
     @Insert("insert into shelter_list (shelter_name, shelter_phone, shelter_county, shelter_city, shelter_address, shelter_type, shelter_open_time, shelter_close_time) values( #{shelter_name}, #{shelter_phone}, #{shelter_county}, #{shelter_city}, #{shelter_address}, #{shelter_type}, #{shelter_open_time}, #{shelter_close_time} )")
-    void insert_Shelter_list(Shelter_listDTO shelter_listDTO);
+    long insert_Shelter_list(Shelter_listDTO shelter_listDTO);
 
     //보호소 정보 수정 (
     @Update("update shelter_list set shelter_name = #{shelter_name}, shelter_phone = #{shelter_phone}, shelter_county = #{shelter_county}, shelter_city = #{shelter_city}, shelter_address = #{shelter_address}, shelter_type = #{shelter_type}, shelter_open_time = #{shelter_open_time}, shelter_close_time = #{shelter_close_time} where shelter_list_pk = #{shelter_list_pk} ")

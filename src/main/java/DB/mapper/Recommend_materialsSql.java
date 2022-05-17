@@ -15,8 +15,6 @@ public class Recommend_materialsSql {
                 .AND()
                 .WHERE("recommend_materials.materials_animal_age = animal.animal_age")
                 .AND()
-                .WHERE("recommend_materials.materials_form_pk = form.form_pk")
-                .AND()
                 .WHERE("form.abandoned_notice_pk = abandoned_notice.abandoned_notice_pk")
                 .AND()
                 .WHERE("abandoned_animal_pk = animal_pk");

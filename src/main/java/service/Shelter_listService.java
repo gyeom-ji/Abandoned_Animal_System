@@ -46,7 +46,7 @@ public class Shelter_listService {
     }
 
     //shelter_list 지역 조회
-    public Shelter_listDTO[]  select_address(String county, String city){
+    public Shelter_listDTO[] select_address(String county, String city){
         return shelterListToDTO(shelter_listDAO.selectShelter_list_place(county, city));
     }
 

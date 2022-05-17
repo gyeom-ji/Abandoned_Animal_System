@@ -15,8 +15,6 @@ public class VaccineSql {
                 .AND()
                 .WHERE("vaccine.vaccine_animal_age = animal.animal_age")
                 .AND()
-                .WHERE("vaccine.vaccine_form_pk = form.form_pk")
-                .AND()
                 .WHERE("form.abandoned_notice_pk = abandoned_notice.abandoned_notice_pk")
                 .AND()
                 .WHERE("abandoned_notice.abandoned_animal_pk = abandoned_notice.animal_pk");

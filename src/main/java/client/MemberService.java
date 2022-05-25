@@ -105,6 +105,7 @@ public class MemberService implements LoginService {
     private void createMissingNotice() throws Exception {
         Missing_noticeDTO missing_noticeDTO = new Missing_noticeDTO();
         AnimalDTO animalDTO = new AnimalDTO();
+        String a = scanner.nextLine();
         System.out.println("animal kind :");
         String kind = scanner.nextLine();
         System.out.println("animal sex :");
@@ -200,7 +201,11 @@ public class MemberService implements LoginService {
 
     private void readMember() throws Exception {
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
-
+        System.out.println("roll pw");
+        String pw = scanner.nextLine();
+        RollDTO rollDTO = new RollDTO();
+        rollDTO.setRoll_pw(pw);
+        sendPt.setObject(rollDTO);
         sendPt.setCode(Protocol.T1_CODE_READ);
         sendPt.setEntity(Protocol.ENTITY_MEMBER);
         sendPt.send(os);
@@ -209,7 +214,7 @@ public class MemberService implements LoginService {
         if (recvPt != null) {
             if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                 if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                    RollDTO rollDTO = (RollDTO) recvPt.getObjectArray();
+                    rollDTO = (RollDTO) recvPt.getObjectArray();
                     System.out.println("id : " + rollDTO.getRoll_id());
                     System.out.println("name : " + rollDTO.getRoll_name());
                     System.out.println("phone : " + rollDTO.getRoll_phone());

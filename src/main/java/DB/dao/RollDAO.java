@@ -13,16 +13,17 @@ public class RollDAO{
     public RollDAO(SqlSessionFactory sqlSessionFactory) {this.sqlSessionFactory = sqlSessionFactory;}
 
     //계정 정보 입력
-    public long insert_Roll(RollDTO rollDTO) {
-        long pk = 0;
+    public void insert_Roll(RollDTO rollDTO) {
+        System.out.println("rolldao insert");
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            pk = session.getMapper(IRollDAO.class).insert_Roll(rollDTO);
+            session.getMapper(IRollDAO.class).insert_Roll(rollDTO);
             session.commit();
+            System.out.println("rolldao insert ok");
         } finally {
             session.close();
         }
-        return pk;
+
     }
 
     //계정 정보 수정

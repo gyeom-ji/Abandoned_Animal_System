@@ -30,8 +30,10 @@ public class RollService {
     }
 
     public void create(RollDTO rollDTO){
+        System.out.println("rollservice create");
         //통신을통해 받은 정보로 계 생성
         rollDAO.insert_Roll(rollDTO);
+
     }
 
     public void update(RollDTO rollDTO) throws IllegalArgumentException {

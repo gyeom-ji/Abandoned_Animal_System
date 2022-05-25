@@ -8,7 +8,6 @@
         <result property="abandoned_notice_num" column="abandoned_notice_num"/>
         <result property="abandoned_receipt_date" column="abandoned_receipt_date"/>
         <result property="abandoned_place" column="abandoned_place"/>
-        <result property="abandoned_period" column="abandoned_period"/>
     </resultMap>
     <resultMap id="shelterResult" type="DB.dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
@@ -52,13 +51,12 @@
         SET abandoned_notice_num=#{abandoned_notice_num},
             abandoned_receipt_date=#{abandoned_receipt_date},
             abandoned_place=#{abandoned_place},
-            abandoned_period=#{abandoned_period},
             WHERE abandoned_notice_num= #{abandoned_notice_num}
     </update>
 
     <insert id="InsertAbandoned" parameterType="DB.dto.Abandoned_noticeDTO">
-        INSERT INTO ABANDONED_NOTICE(abandoned_animal_pk, shelter_list_pk, abandoned_notice_num, abandoned_receipt_date, abandoned_place, abandoned_period)
-        VALUES (#{abandoned_animal_pk},#{shelter_list_pk},#{abandoned_notice_num}, #{abandoned_receipt_date}, #{abandoned_place}, #{abandoned_period})
+        INSERT INTO ABANDONED_NOTICE(abandoned_animal_pk, shelter_list_pk, abandoned_notice_num, abandoned_receipt_date, abandoned_place)
+        VALUES (#{abandoned_animal_pk},#{shelter_list_pk},#{abandoned_notice_num}, #{abandoned_receipt_date}, #{abandoned_place})
     </insert>
 
     <delete id="RemoveAbandoned" parameterType="String" >
@@ -66,12 +64,19 @@
         WHERE abandoned_notice_num = #{abandoned_notice_num}
     </delete>
 
-
     <select id="FindByAbandoned_notice_num" resultMap="result" >
         SELECT *
         FROM ABANDONED_NOTICE
         <where>
             abandoned_notice_num = #{abandoned_notice_num}
+        </where>
+    </select>
+
+    <select id="FindByID" resultType="long" >
+        SELECT abandoned_notice_pk
+        FROM ABANDONED_NOTICE
+        <where>
+            abandoned_notice_pk = #{abandoned_notice_pk}
         </where>
     </select>
 </mapper>

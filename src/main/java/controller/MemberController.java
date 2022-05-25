@@ -203,7 +203,7 @@ public class MemberController implements DefinedController {
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
+
             sendPt.send(os);
         }
     }
@@ -218,7 +218,7 @@ public class MemberController implements DefinedController {
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
+
             sendPt.send(os);
         }
     }
@@ -235,7 +235,7 @@ public class MemberController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -268,7 +268,7 @@ public class MemberController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -300,7 +300,7 @@ public class MemberController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -347,7 +347,7 @@ public class MemberController implements DefinedController {
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
+
             sendPt.send(os);
         }
     }

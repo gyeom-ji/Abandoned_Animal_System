@@ -37,9 +37,11 @@ public class UndefinedController {
             switch (recvPt.getCode()) {
                 case Protocol.T1_CODE_LOGIN:   // 로그인 요청
                     return loginReq(recvPt);
+
                 case Protocol.T1_CODE_CREATE: // 생성 요청
-                    createRoll(recvPt);
-                    return USER_UNDEFINED;
+
+                    return createRoll(recvPt);
+
                 case Protocol.T1_CODE_LOGOUT:  // 로그아웃 요청
                     logoutReq();
                     break;
@@ -63,7 +65,6 @@ public class UndefinedController {
 
             // 로그인 성공 - 성공 메시지 전송
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
-            sendPt.setObject(loginRollDTO);
             sendPt.send(os);
 
             if(loginRollDTO.getRoll_id().charAt(0) == '#'){
@@ -77,35 +78,34 @@ public class UndefinedController {
         }catch(IllegalArgumentException e){
             // 로그인 실패 - 실패 메시지 전송
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
             sendPt.send(os);
         }
         return USER_UNDEFINED;
     }
 
     // 계정 생성
-    private void createRoll(Protocol recvPt) throws Exception{
+    private int createRoll(Protocol recvPt) throws Exception{
         RollService rollService = new RollService(rollDAO);
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-
+        System.out.println("create entry");
+        RollDTO dto = new RollDTO();
         try{
-            RollDTO dto = (RollDTO) recvPt.getObject();
-            if(dto.getRoll_id().charAt(0) == '#'){
-                dto.setRoll_type("관리자");
-            }else if(dto.getRoll_id().charAt(0) == '@'){
-                dto.setRoll_type("직원");
-            }else{
-                dto.setRoll_type("회원");
-            }
+            dto = (RollDTO) recvPt.getObject();
+            System.out.println(dto.getRoll_type());
             rollService.create(dto);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
         }catch(IllegalArgumentException e){
             // 계정 생성 실패
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
             sendPt.send(os);
         }
+        if( dto.getRoll_type().equals("관리자"))
+            return ADMIN_TYPE;
+        else if( dto.getRoll_type().equals("직원"))
+                return STAFF_TYPE;
+        else
+        return MEMBER_TYPE;
     }
 
     // 로그아웃

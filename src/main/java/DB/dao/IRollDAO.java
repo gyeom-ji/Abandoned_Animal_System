@@ -21,22 +21,22 @@ public interface IRollDAO {
 
     //계정 정보 입력
     @Insert("insert into roll (roll_id, roll_pw, roll_name, roll_phone, roll_type) values( #{roll_id}, #{roll_pw}, #{roll_name}, #{roll_phone}, #{roll_type})")
-    @SelectKey(keyColumn="roll_pk", keyProperty="roll_pk", resultType=long.class, before=false, statement="select last_insert_id()")
-    long insert_Roll(RollDTO rollDTO);
+//    @SelectKey(keyColumn="roll_pk", keyProperty="roll_pk", resultType=long.class, before=false, statement="select last_insert_id()")
+    void insert_Roll(RollDTO rollDTO);
 
     //계정 정보 수정 (
-    @Update("update roll set roll_pw = #{roll_pw}, roll_name = #{roll_name}, roll_phone = #{roll_phone} where roll_id = #{roll_id} ")
+    @Update("update roll set roll_pw = #{roll_pw}, roll_name = #{roll_name}, roll_phone = #{roll_phone} where roll_id = #{roll_id}")
     void update_Roll(RollDTO rollDTO);
 
     //계정 정보 삭제 (
-    @Delete("delete from roll where roll_id = #{roll_id} ")
+    @Delete("delete from roll where roll_id = #{roll_id}")
     void delete_Roll(String id);
 
     @SelectProvider(type = RollSql.class, method = "select_Roll")
     @ResultMap("rollResultSet")
     List<RollDTO> select_Roll(String roll_id);
 
-    @Select("select * from roll where roll_id=#{roll_id")
+    @Select("select * from roll where roll_id = #{roll_id}")
     RollDTO select(String roll_id);
 
 

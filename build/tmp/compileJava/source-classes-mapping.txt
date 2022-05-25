@@ -1,7 +1,7 @@
 service/RollService.java
  service.RollService
-controller/MainController.java
- controller.MainController
+Run.java
+ Run
 service/AnimalService.java
  service.AnimalService
 DB/dao/VaccineDAO.java
@@ -12,10 +12,12 @@ DB/PooledDataSource.java
  DB.PooledDataSource
 DB/dao/FormDAO.java
  DB.dao.FormDAO
+client/Login.java
+ client.Login
 service/Recommend_materialsService.java
  service.Recommend_materialsService
-DB/mapper/RollSql.java
- DB.mapper.RollSql
+network/Server.java
+ network.Server
 DB/dao/Shelter_listDAO.java
  DB.dao.Shelter_listDAO
 service/Abandoned_noticeService.java
@@ -38,16 +40,14 @@ DB/dto/Recommend_materialsDTO.java
  DB.dto.Recommend_materialsDTO
 MyBatisConnectionFactory.java
  MyBatisConnectionFactory
-DB/dto/Abandoned_noticeDTO.java
- DB.dto.Abandoned_noticeDTO
+DB/dao/IRollDAO.java
+ DB.dao.IRollDAO
 controller/AdminController.java
  controller.AdminController
 DB/dao/Abandoned_noticeDAO.java
  DB.dao.Abandoned_noticeDAO
 DB/dao/Recommend_materialsDAO.java
  DB.dao.Recommend_materialsDAO
-controller/LoginController.java
- controller.LoginController
 DB/mapper/MyBatisConnectionFactory.java
  DB.mapper.MyBatisConnectionFactory
 DB/dto/Shelter_listDTO.java
@@ -64,39 +64,47 @@ network/Serializer.java
  network.Serializer
 network/Protocol.java
  network.Protocol
+client/AdminService.java
+ client.AdminService
 DB/dto/FormDTO.java
  DB.dto.FormDTO
 DB/dto/RollDTO.java
  DB.dto.RollDTO
-DB/dao/IRollDAO.java
- DB.dao.IRollDAO
+Main.java
+ Main
 DB/dao/AnimalDAO.java
  DB.dao.AnimalDAO
 service/Missing_noticeService.java
  service.Missing_noticeService
 controller/DefinedController.java
  controller.DefinedController
+Abandoned_Animal_System.java
+ Abandoned_Animal_System
+network/Abandoned_AnimalDB.java
+ network.Abandoned_AnimalDB
 DB/mapper/Recommend_materialsSql.java
  DB.mapper.Recommend_materialsSql
 DB/dto/AnimalDTO.java
  DB.dto.AnimalDTO
 DB/dao/IRecommend_materialsDAO.java
  DB.dao.IRecommend_materialsDAO
+client/LoginService.java
+ client.LoginService
 DB/dao/Missing_noticeDAO.java
  DB.dao.Missing_noticeDAO
 DB/dto/VaccineDTO.java
  DB.dto.VaccineDTO
-DB/mapper/VaccineSql.java
- DB.mapper.VaccineSql
+DB/mapper/RollSql.java
+ DB.mapper.RollSql
+controller/MainController.java
+ controller.MainController
 network/Deserializer.java
  network.Deserializer
-network/Server.java
- network.Server
-Abandoned_Animal_System.java
- Abandoned_Animal_System
-Main.java
- Main
-AnimalProgram.java
- AnimalProgram
-Run.java
- Run
+client/MemberService.java
+ client.MemberService
+DB/mapper/VaccineSql.java
+ DB.mapper.VaccineSql
+DB/dto/Abandoned_noticeDTO.java
+ DB.dto.Abandoned_noticeDTO
+client/StaffService.java
+ client.StaffService

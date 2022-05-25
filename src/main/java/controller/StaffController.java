@@ -259,7 +259,7 @@ public class StaffController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -292,7 +292,7 @@ public class StaffController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -324,7 +324,7 @@ public class StaffController implements DefinedController {
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
-                    sendPt.setObject(e.getMessage());
+
                     sendPt.send(os);
                 }
                 break;
@@ -356,7 +356,7 @@ public class StaffController implements DefinedController {
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
             sendPt.setCode(Protocol.T2_CODE_FAIL);
-            sendPt.setObject(e.getMessage());
+
             sendPt.send(os);
         }
     }

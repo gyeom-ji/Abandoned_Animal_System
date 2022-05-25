@@ -17,7 +17,7 @@ public class MainController extends Thread {
     public static final int STAFF_TYPE = 1;
     public static final int MEMBER_TYPE= 2;
     public static final int ADMIN_TYPE = 3;
-    private int userType;
+    private int userType = USER_UNDEFINED;
 
     private int clientID;   // client port 번호
     private Socket socket;

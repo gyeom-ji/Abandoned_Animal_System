@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         String address = "127.0.0.1";
-        int port = 3306;
+        int port = 3000;
         try {
             Socket socket = new Socket(address, port);
             Login login = new Login();

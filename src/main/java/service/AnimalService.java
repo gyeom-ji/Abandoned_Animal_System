@@ -18,7 +18,7 @@ public class AnimalService {
     //animal 생성 기능
     public void create(AnimalDTO animalDTO) {
         //생성한 animal 데이터베이스에 저장
-        animalDAO.InsertAnimal(animalDTO);
+        long pk = animalDAO.InsertAnimal(animalDTO);
     }
 
     //animal 수정 기능

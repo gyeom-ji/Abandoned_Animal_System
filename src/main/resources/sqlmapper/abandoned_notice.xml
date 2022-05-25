@@ -72,8 +72,8 @@
         </where>
     </select>
 
-    <select id="FindByID" resultMap="long" >
-        SELECT *
+    <select id="FindByID" resultType="long" >
+        SELECT abandoned_notice_pk
         FROM ABANDONED_NOTICE
         <where>
             abandoned_notice_pk = #{abandoned_notice_pk}

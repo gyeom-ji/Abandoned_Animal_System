@@ -47,6 +47,6 @@ public interface IShelter_listDAO {
     Shelter_listDTO select(String shelter_name);
 
     //유기동물 공고 insert용 select
-    @Select("select * from shelter_list where shelter_name=#{shelter_name and where shelter_phone=#{shelter_phone}")
-    Shelter_listDTO select_abandoned(String shelter_name, String shelter_phone);
+    @Select("select * from shelter_list where shelter_name=#{shelter_name} and shelter_phone=#{shelter_phone}")
+    Shelter_listDTO select_abandoned(@Param("shelter_name") String shelter_name, @Param("shelter_phone") String shelter_phone);
 }

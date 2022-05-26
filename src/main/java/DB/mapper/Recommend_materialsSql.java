@@ -32,11 +32,11 @@ public class Recommend_materialsSql {
     }
 
 
-    public String select(long shelter_list_pk){
+    public String select(long recommend_materials_pk){
         SQL sql = new SQL()
                 .SELECT("*")
-                .FROM("shelter_list")
-                .WHERE("shelter_list_pk=#{shelter_list_pk}");
+                .FROM("recommend_materials")
+                .WHERE("recommend_materials_pk=#{recommend_materials_pk}");
         return sql.toString();
     }
 }

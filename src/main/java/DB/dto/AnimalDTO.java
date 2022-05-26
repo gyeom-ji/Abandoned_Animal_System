@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.awt.*;
 import java.io.*;
+import java.util.List;
 import java.sql.Blob;
 
 @Getter
@@ -21,6 +22,6 @@ public class AnimalDTO implements Serializable {
     private String animal_breed;
     private String animal_neuter;
     private String animal_img;
-
+    public AnimalDTO(){;}
 
 }

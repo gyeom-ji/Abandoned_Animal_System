@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 public class Main {
     public static void main(String[] args) {
 
-        String address = "127.0.0.1";
+        String address = "192.168.231.235";
         int port = 3000;
         try {
             Socket socket = new Socket(address, port);

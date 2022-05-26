@@ -6,6 +6,9 @@ import network.Protocol;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class AdminService implements LoginService {
@@ -41,13 +44,17 @@ public class AdminService implements LoginService {
     public void run() throws Exception {
         int menu = 0;
         boolean exit = true;
+        Popup();
         while (exit) {
+
             System.out.println("[1] 상품 생성  [2]백신 생성  [3]내 정보  [4]실종동물 공고 조회" +
                     "\n[5]유기동물 공고 조회  [6]유기동물보호소 조회  [7]상품 조회 [8]백신 조회" +
                     "\n[9]내 정보 변경 [10]상품 정보 변경 [11]백신 정보 변경 [12]백신 삭제" +
                     "\n[13]상품 삭제 [14]실종공고 삭제 [15]유기동물 공고 삭제 [16]로그아웃");
             menu = scanner.nextInt();
+
             switch (menu) {
+
                 case 1:
                     createMaterials();
                     break;
@@ -105,6 +112,7 @@ public class AdminService implements LoginService {
     }
 
     private void createMaterials() throws Exception {
+        String a = scanner.nextLine();
         Recommend_materialsDTO recommend_materialsDTO = new Recommend_materialsDTO();
         System.out.println("name");
         String name = scanner.nextLine();
@@ -150,6 +158,7 @@ public class AdminService implements LoginService {
 
     private void createVaccine() throws IllegalAccessException, IOException {
         VaccineDTO vaccineDTO = new VaccineDTO();
+        String a = scanner.nextLine();
         System.out.println("name");
         String name = scanner.nextLine();
         System.out.println("basic");
@@ -219,6 +228,7 @@ public class AdminService implements LoginService {
                     }
                 }
             } else if (menu == 2) {
+                String a = scanner.nextLine();
                 System.out.println("ID 입력 : ");
                 String id = scanner.nextLine();
                 sendPt.setObject(id);
@@ -240,6 +250,7 @@ public class AdminService implements LoginService {
                     }
                 }
             } else if (menu == 3) {
+                String a = scanner.nextLine();
                 System.out.println("type 입력 : ");
                 String type = scanner.nextLine();
                 sendPt.setObject(type);
@@ -252,7 +263,7 @@ public class AdminService implements LoginService {
                 if (recvPt != null) {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                            RollDTO[] rollDTO = (RollDTO[]) recvPt.getObject();
+                            RollDTO[] rollDTO = (RollDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < rollDTO.length; i++) {
                                 System.out.println("id : " + rollDTO[i].getRoll_id());
                                 System.out.println("name : " + rollDTO[i].getRoll_name());
@@ -285,14 +296,15 @@ public class AdminService implements LoginService {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
                             missing_noticeDTO = (Missing_noticeDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < missing_noticeDTO.length; i++) {
-                                System.out.println("animal pk : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_pk());
-                                System.out.println("animal kind : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_kind());
-                                System.out.println("animal sex : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_sex());
-                                System.out.println("animal age : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_age());
-                                System.out.println("animal color : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_color());
-                                System.out.println("animal feature : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_feature());
-                                System.out.println("animal breed : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_breed());
-                                System.out.println("animal img : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_img());
+                                System.out.println("animal pk : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_pk());
+                                System.out.println("animal kind : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_kind());
+                                System.out.println("animal sex : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_sex());
+                                System.out.println("animal age : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_age());
+                                System.out.println("animal color : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_color());
+                                System.out.println("animal feature : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_feature());
+                                System.out.println("animal breed : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_breed());
+                                System.out.println("animal neuter : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_neuter());
+                                System.out.println("animal img : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_img());
                                 System.out.println("missing notice pk : " + missing_noticeDTO[i].getMissing_notice_pk());
                                 System.out.println("missing notice person name : " + missing_noticeDTO[i].getMissing_person_name());
                                 System.out.println("missing notice animal name : " + missing_noticeDTO[i].getMissing_animal_name());
@@ -308,13 +320,18 @@ public class AdminService implements LoginService {
                     }
                 }
             } else if (menu == 2) {
+
                 String option[] = new String[2];
+                String a = scanner.nextLine();
                 System.out.println("county 입력 : ");
                 option[0] = scanner.nextLine();
                 System.out.println("city 입력 : ");
                 option[1] = scanner.nextLine();
-                sendPt.setObjectArray(option);
+                Missing_noticeDTO missing_noticeDTO1 = new Missing_noticeDTO();
+                missing_noticeDTO1.setMissing_county(option[0]);
+                missing_noticeDTO1.setMissing_city(option[1]);
                 sendPt.setCode(Protocol.T1_CODE_READ);
+                sendPt.setObject(missing_noticeDTO1);
                 sendPt.setReadOption(Protocol.READ_BY_OPTION);
                 sendPt.setEntity(Protocol.ENTITY_MISSING_NOTICE);
                 sendPt.send(os);
@@ -324,15 +341,17 @@ public class AdminService implements LoginService {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
                             missing_noticeDTO = (Missing_noticeDTO[]) recvPt.getObjectArray();
+
                             for (int i = 0; i < missing_noticeDTO.length; i++) {
-                                System.out.println("animal pk : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_pk());
-                                System.out.println("animal kind : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_kind());
-                                System.out.println("animal sex : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_sex());
-                                System.out.println("animal age : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_age());
-                                System.out.println("animal color : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_color());
-                                System.out.println("animal feature : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_feature());
-                                System.out.println("animal breed : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_breed());
-                                System.out.println("animal img : " + missing_noticeDTO[i].getAnimalDTO().getAnimal_img());
+                                System.out.println("animal pk : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_pk());
+                                System.out.println("animal kind : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_kind());
+                                System.out.println("animal sex : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_sex());
+                                System.out.println("animal age : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_age());
+                                System.out.println("animal color : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_color());
+                                System.out.println("animal feature : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_feature());
+                                System.out.println("animal breed : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_breed());
+                                System.out.println("animal neuter : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_neuter());
+                                System.out.println("animal img : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_img());
                                 System.out.println("missing notice pk : " + missing_noticeDTO[i].getMissing_notice_pk());
                                 System.out.println("missing notice person name : " + missing_noticeDTO[i].getMissing_person_name());
                                 System.out.println("missing notice animal name : " + missing_noticeDTO[i].getMissing_animal_name());
@@ -367,50 +386,49 @@ public class AdminService implements LoginService {
                 if (recvPt != null) {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                            abandoned_noticeDTO = (Abandoned_noticeDTO[]) recvPt.getObject();
+                            abandoned_noticeDTO = (Abandoned_noticeDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < abandoned_noticeDTO.length; i++) {
-                                System.out.println("animal pk : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_pk());
-                                System.out.println("animal kind : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_kind());
-                                System.out.println("animal sex : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_sex());
-                                System.out.println("animal age : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_age());
-                                System.out.println("animal color : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_color());
-                                System.out.println("animal feature : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_feature());
-                                System.out.println("animal breed : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_breed());
-                                System.out.println("animal neuter : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_neuter());
-                                System.out.println("animal img : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_img());
+                                System.out.println("animal pk : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_pk());
+                                System.out.println("animal kind : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_kind());
+                                System.out.println("animal sex : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_sex());
+                                System.out.println("animal age : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_age());
+                                System.out.println("animal color : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_color());
+                                System.out.println("animal feature : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_feature());
+                                System.out.println("animal breed : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_breed());
+                                System.out.println("animal neuter : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_neuter());
+                                System.out.println("animal img : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_img());
                                 System.out.println("abandoned notice pk : " + abandoned_noticeDTO[i].getAbandoned_notice_pk());
                                 System.out.println("abandoned notice num : " + abandoned_noticeDTO[i].getAbandoned_notice_num());
                                 System.out.println("abandoned notice receipt date : " + abandoned_noticeDTO[i].getAbandoned_receipt_date());
                                 System.out.println("abandoned notice place : " + abandoned_noticeDTO[i].getAbandoned_place());
-                                System.out.println("shelter pk : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_list_pk());
-                                System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_name())
-                                ;
-                                System.out.println("shelter phone : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_phone())
-                                ;
-                                System.out.println("shelter county : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_county())
-                                ;
-                                System.out.println("shelter city : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_city())
-                                ;
-                                System.out.println("shelter address : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_address())
-                                ;
-                                System.out.println("shelter type : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_type())
-                                ;
-                                System.out.println("shelter open time : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_open_time())
-                                ;
-                                System.out.println("shelter close time : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_close_time())
-                                ;
+                                System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_name());
+                                System.out.println("shelter phone : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_phone());
+                                System.out.println("shelter county : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_county());
+                                System.out.println("shelter city : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_city());
+                                System.out.println("shelter address : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_address());
+                                System.out.println("shelter type : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_type());
+                                System.out.println("shelter open time : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_open_time());
+                                System.out.println("shelter close time : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_close_time());
                             }
                         } else if (recvPt.getCode() == Protocol.T2_CODE_FAIL)
                             System.out.println("정보가 없습니다.");
                     }
                 }
             } else if (menu == 2) {
+                List<Shelter_listDTO> shelter_listDTOList = new ArrayList<>(1);
+                String a = scanner.nextLine();
                 String option[] = new String[2];
                 System.out.println("county 입력 : ");
                 option[0] = scanner.nextLine();
                 System.out.println("city 입력 : ");
                 option[1] = scanner.nextLine();
-                sendPt.setObjectArray(option);
+                Shelter_listDTO shelter_listDTO = new Shelter_listDTO();
+                shelter_listDTO.setShelter_county(option[0]);
+                shelter_listDTO.setShelter_city(option[1]);
+                shelter_listDTOList.add(shelter_listDTO);
+                Abandoned_noticeDTO abandoned_noticeDTO1 = new Abandoned_noticeDTO();
+                abandoned_noticeDTO1.setShelter_listDTOList(shelter_listDTOList);
+                sendPt.setObject(abandoned_noticeDTO1);
                 sendPt.setCode(Protocol.T1_CODE_READ);
                 sendPt.setReadOption(Protocol.READ_BY_OPTION);
                 sendPt.setEntity(Protocol.ENTITY_ABANDONED_ANIMAL_NOTICE);
@@ -420,30 +438,29 @@ public class AdminService implements LoginService {
                 if (recvPt != null) {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                            abandoned_noticeDTO = (Abandoned_noticeDTO[]) recvPt.getObject();
+                            abandoned_noticeDTO = (Abandoned_noticeDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < abandoned_noticeDTO.length; i++) {
-                                System.out.println("animal pk : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_pk());
-                                System.out.println("animal kind : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_kind());
-                                System.out.println("animal sex : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_sex());
-                                System.out.println("animal age : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_age());
-                                System.out.println("animal color : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_color());
-                                System.out.println("animal feature : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_feature());
-                                System.out.println("animal breed : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_breed());
-                                System.out.println("animal neuter : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_neuter());
-                                System.out.println("animal img : " + abandoned_noticeDTO[i].getAnimalDTO().getAnimal_img());
+                                System.out.println("animal pk : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_pk());
+                                System.out.println("animal kind : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_kind());
+                                System.out.println("animal sex : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_sex());
+                                System.out.println("animal age : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_age());
+                                System.out.println("animal color : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_color());
+                                System.out.println("animal feature : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_feature());
+                                System.out.println("animal breed : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_breed());
+                                System.out.println("animal neuter : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_neuter());
+                                System.out.println("animal img : " + abandoned_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_img());
                                 System.out.println("abandoned notice pk : " + abandoned_noticeDTO[i].getAbandoned_notice_pk());
                                 System.out.println("abandoned notice num : " + abandoned_noticeDTO[i].getAbandoned_notice_num());
                                 System.out.println("abandoned notice receipt date : " + abandoned_noticeDTO[i].getAbandoned_receipt_date());
                                 System.out.println("abandoned notice place : " + abandoned_noticeDTO[i].getAbandoned_place());
-                                System.out.println("shelter pk : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_list_pk());
-                                System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_name());
-                                System.out.println("shelter phone : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_phone());
-                                System.out.println("shelter county : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_county());
-                                System.out.println("shelter city : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_city());
-                                System.out.println("shelter address : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_address());
-                                System.out.println("shelter type : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_type());
-                                System.out.println("shelter open time : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_open_time());
-                                System.out.println("shelter close time : " + abandoned_noticeDTO[i].getShelter_listDTO().getShelter_close_time());
+                                System.out.println("shelter name : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_name());
+                                System.out.println("shelter phone : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_phone());
+                                System.out.println("shelter county : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_county());
+                                System.out.println("shelter city : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_city());
+                                System.out.println("shelter address : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_address());
+                                System.out.println("shelter type : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_type());
+                                System.out.println("shelter open time : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_open_time());
+                                System.out.println("shelter close time : " + abandoned_noticeDTO[i].getShelter_listDTOList().get(0).getShelter_close_time());
                             }
                         } else if (recvPt.getCode() == Protocol.T2_CODE_FAIL)
                             System.out.println("정보가 없습니다.");
@@ -469,7 +486,7 @@ public class AdminService implements LoginService {
                 if (recvPt != null) {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                            shelter_listDTO = (Shelter_listDTO[]) recvPt.getObject();
+                            shelter_listDTO = (Shelter_listDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < shelter_listDTO.length; i++) {
                                 System.out.println("pk : " + shelter_listDTO[i].getShelter_list_pk());
                                 System.out.println("name : " + shelter_listDTO[i].getShelter_name());
@@ -486,6 +503,7 @@ public class AdminService implements LoginService {
                     }
                 }
             } else if (menu == 2) {
+                String a = scanner.nextLine();
                 String option[] = new String[2];
                 System.out.println("county 입력 : ");
                 option[0] = scanner.nextLine();
@@ -501,7 +519,7 @@ public class AdminService implements LoginService {
                 if (recvPt != null) {
                     if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                         if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                            shelter_listDTO = (Shelter_listDTO[]) recvPt.getObject();
+                            shelter_listDTO = (Shelter_listDTO[]) recvPt.getObjectArray();
                             for (int i = 0; i < shelter_listDTO.length; i++) {
                                 System.out.println("pk : " + shelter_listDTO[i].getShelter_list_pk());
                                 System.out.println("name : " + shelter_listDTO[i].getShelter_name());
@@ -532,9 +550,9 @@ public class AdminService implements LoginService {
         if (recvPt != null) {
             if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                 if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                    recommend_materialsDTO = (Recommend_materialsDTO[]) recvPt.getObject();
+                    recommend_materialsDTO = (Recommend_materialsDTO[]) recvPt.getObjectArray();
                     for (int i = 0; i < recommend_materialsDTO.length; i++) {
-                        System.out.println("pk : " + recommend_materialsDTO[i].getRecommended_materials_pk());
+                        System.out.println("pk : " + recommend_materialsDTO[i].getRecommend_materials_pk());
                         System.out.println("name : " + recommend_materialsDTO[i].getMaterials_name());
                         System.out.println("type : " + recommend_materialsDTO[i].getMaterials_type());
                         System.out.println("url : " + recommend_materialsDTO[i].getMaterials_url());
@@ -561,7 +579,7 @@ public class AdminService implements LoginService {
         if (recvPt != null) {
             if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                 if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
-                    vaccineDTO = (VaccineDTO[]) recvPt.getObject();
+                    vaccineDTO = (VaccineDTO[]) recvPt.getObjectArray();
                     for (int i = 0; i < vaccineDTO.length; i++) {
                         System.out.println("pk : " + vaccineDTO[i].getVaccine_pk());
                         System.out.println("name : " + vaccineDTO[i].getVaccine_name());
@@ -580,7 +598,7 @@ public class AdminService implements LoginService {
     }
 
     private void updateVaccine() throws Exception {
-
+        String a = scanner.nextLine();
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
         System.out.println("name : ");
         String name = scanner.nextLine();
@@ -624,6 +642,7 @@ public class AdminService implements LoginService {
     }
 
     private void updateMaterials() throws Exception {
+        String a = scanner.nextLine();
         Recommend_materialsDTO recommend_materialsDTO = new Recommend_materialsDTO();
         System.out.println("name");
         String name = scanner.nextLine();
@@ -676,6 +695,7 @@ public class AdminService implements LoginService {
         int menu = scanner.nextInt();
         while (menu != 3) {
             if (menu == 1) {
+                String a = scanner.nextLine();
                 System.out.println("전화번호 : ");
                 String num = scanner.nextLine();
                 System.out.println("이름 : ");
@@ -699,6 +719,7 @@ public class AdminService implements LoginService {
                     }
                 }
             } else if (menu == 2) {
+                String a = scanner.nextLine();
                 System.out.println("비밀번호 : ");
                 String num = scanner.nextLine();
                 rollDTO.setRoll_pw(num);
@@ -725,10 +746,12 @@ public class AdminService implements LoginService {
 
     private void deleteVaccine() throws IllegalAccessException, IOException {
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
+        String a = scanner.nextLine();
         System.out.println("pk : ");
         long pk = scanner.nextLong();
-
-        sendPt.setObject(pk);
+        VaccineDTO vaccineDTO = new VaccineDTO();
+        vaccineDTO.setVaccine_pk(pk);
+        sendPt.setObject(vaccineDTO);
         sendPt.setCode(Protocol.T1_CODE_DELETE);
         sendPt.setEntity(Protocol.ENTITY_VACCINE);
         sendPt.send(os);
@@ -745,11 +768,13 @@ public class AdminService implements LoginService {
     }
 
     private void deleteMaterials() throws Exception {
+        String a = scanner.nextLine();
         System.out.println("pk : ");
         long pk = scanner.nextLong();
-
+        Recommend_materialsDTO recommend_materialsDTO = new Recommend_materialsDTO();
+        recommend_materialsDTO.setRecommend_materials_pk(pk);
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
-        sendPt.setObject(pk);
+        sendPt.setObject(recommend_materialsDTO);
         sendPt.setCode(Protocol.T1_CODE_DELETE);
         sendPt.setEntity(Protocol.ENTITY_MATERIALS);
         sendPt.send(os);
@@ -766,11 +791,13 @@ public class AdminService implements LoginService {
     }
 
     private void deleteMissingNotice() throws Exception {
+        String a = scanner.nextLine();
         System.out.println("pk : ");
         long pk = scanner.nextLong();
-
+        Missing_noticeDTO missing_noticeDTO = new Missing_noticeDTO();
+        missing_noticeDTO.setMissing_notice_pk(pk);
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
-        sendPt.setObject(pk);
+        sendPt.setObject(missing_noticeDTO);
         sendPt.setCode(Protocol.T1_CODE_DELETE);
         sendPt.setEntity(Protocol.ENTITY_MISSING_NOTICE);
         sendPt.send(os);
@@ -787,11 +814,13 @@ public class AdminService implements LoginService {
     }
 
     private void deleteAbandonedAnimalNotice() throws Exception {
+        String a = scanner.nextLine();
         System.out.println("notice num : ");
         String notice_num = scanner.nextLine();
-
+        Abandoned_noticeDTO abandoned_noticeDTO = new Abandoned_noticeDTO();
+        abandoned_noticeDTO.setAbandoned_notice_num(notice_num);
         Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
-        sendPt.setObject(notice_num);
+        sendPt.setObject(abandoned_noticeDTO);
         sendPt.setCode(Protocol.T1_CODE_DELETE);
         sendPt.setEntity(Protocol.ENTITY_ABANDONED_ANIMAL_NOTICE);
         sendPt.send(os);
@@ -821,6 +850,56 @@ public class AdminService implements LoginService {
                     System.out.println("실패");
             }
         }
+    }
+
+    private void Popup() throws  Exception{
+        Random random = new Random();
+
+        Protocol sendPt = new Protocol(Protocol.TYPE_REQUEST);
+        String option[] = new String[2];
+        System.out.println("county 입력 : ");
+        option[0] = scanner.nextLine();
+        System.out.println("city 입력 : ");
+        option[1] = scanner.nextLine();
+        Missing_noticeDTO missing_noticeDTO1 = new Missing_noticeDTO();
+        missing_noticeDTO1.setMissing_county(option[0]);
+        missing_noticeDTO1.setMissing_city(option[1]);
+        sendPt.setCode(Protocol.T1_CODE_READ);
+        sendPt.setObject(missing_noticeDTO1);
+        sendPt.setReadOption(Protocol.READ_BY_OPTION);
+        sendPt.setEntity(Protocol.ENTITY_MISSING_NOTICE);
+        sendPt.send(os);
+
+
+        Protocol recvPt = read();
+        if (recvPt != null) {
+            if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
+                if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
+                    Missing_noticeDTO[] missing_noticeDTO = (Missing_noticeDTO[]) recvPt.getObjectArray();
+                    int i = random.nextInt(missing_noticeDTO.length);
+
+                        System.out.println("animal pk : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_pk());
+                        System.out.println("animal kind : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_kind());
+                        System.out.println("animal sex : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_sex());
+                        System.out.println("animal age : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_age());
+                        System.out.println("animal color : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_color());
+                        System.out.println("animal feature : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_feature());
+                        System.out.println("animal breed : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_breed());
+                        System.out.println("animal neuter : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_neuter());
+                        System.out.println("animal img : " + missing_noticeDTO[i].getAnimalDTOList().get(0).getAnimal_img());
+                        System.out.println("missing notice pk : " + missing_noticeDTO[i].getMissing_notice_pk());
+                        System.out.println("missing notice person name : " + missing_noticeDTO[i].getMissing_person_name());
+                        System.out.println("missing notice animal name : " + missing_noticeDTO[i].getMissing_animal_name());
+                        System.out.println("missing notice email : " + missing_noticeDTO[i].getMissing_email());
+                        System.out.println("missing notice phone : " + missing_noticeDTO[i].getMissing_phone());
+                        System.out.println("missing notice date : " + missing_noticeDTO[i].getMissing_date());
+                        System.out.println("missing notice county : " + missing_noticeDTO[i].getMissing_county());
+                        System.out.println("missing notice city : " + missing_noticeDTO[i].getMissing_city());
+                        System.out.println("missing notice address : " + missing_noticeDTO[i].getMissing_address());
+                    }
+                } else if (recvPt.getCode() == Protocol.T2_CODE_FAIL)
+                    System.out.println("정보가 없습니다.");
+            }
     }
 
 }

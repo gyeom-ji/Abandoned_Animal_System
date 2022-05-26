@@ -29,11 +29,10 @@ public class FormService {
     }
 
     //폼(승인) 수정 기능
-    public void update_approval(long form_pk) {
-        FormDTO form = formDAO.FindByForm_id(form_pk);
+    public void update_approval(FormDTO formDTO) {
+        FormDTO form = formDAO.FindByForm_id(formDTO.getForm_pk());
         //받은 정보로 해당 form 수정
-        form.setForm_approval(form.getForm_approval());
-
+        form.setForm_approval(formDTO.getForm_approval());
         //수정된 form 저장
         formDAO.UpdateForm(form);
     }

@@ -62,8 +62,8 @@ public class UndefinedController {
         try{
             RollService rollService = new RollService(rollDAO);
             RollDTO loginRollDTO= rollService.login(rollDTO);
-
             // 로그인 성공 - 성공 메시지 전송
+            sendPt.setObject(loginRollDTO);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 

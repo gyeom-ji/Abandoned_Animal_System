@@ -17,7 +17,7 @@ public class MainController extends Thread {
     public static final int STAFF_TYPE = 1;
     public static final int MEMBER_TYPE= 2;
     public static final int ADMIN_TYPE = 3;
-    private int userType = USER_UNDEFINED;
+    private int userType;
 
     private int clientID;   // client port 번호
     private Socket socket;
@@ -82,7 +82,6 @@ public class MainController extends Thread {
 
     public void handler(Protocol pt) throws Exception {
         System.out.println("handler entry");
-
         switch(userType){
             //로그인하기전 요청 처리
             case USER_UNDEFINED:
@@ -94,10 +93,26 @@ public class MainController extends Thread {
                 break;
             //로그인 후의 요청처리
             case ADMIN_TYPE:
+                AdminController adminController = new AdminController(
+                        abandoned_noticeDAO, animalDAO, formDAO, missing_noticeDAO, recommend_materialsDAO,
+                        rollDAO,shelter_listDAO,vaccineDAO,is, os
+                );
+                userType = adminController.handler(pt);
+                break;
             case STAFF_TYPE:
+                StaffController staffController = new StaffController(
+                        abandoned_noticeDAO, animalDAO, formDAO, missing_noticeDAO,
+                        recommend_materialsDAO, rollDAO, shelter_listDAO, vaccineDAO
+                        , is, os);
+                userType = staffController.handler(pt);
+                break;
             case MEMBER_TYPE:
-                userType = myController.handler(pt);
-                setMyController();
+                MemberController memberController = new MemberController(
+                        abandoned_noticeDAO, animalDAO, formDAO, missing_noticeDAO,
+                        recommend_materialsDAO, rollDAO, shelter_listDAO, vaccineDAO
+                        , is, os);
+                System.out.println("membertype");
+                userType = memberController.handler(pt);
                 break;
         }
     }
@@ -128,6 +143,7 @@ public class MainController extends Thread {
                             abandoned_noticeDAO, animalDAO, formDAO, missing_noticeDAO,
                             recommend_materialsDAO, rollDAO, shelter_listDAO, vaccineDAO
                             , is, os);
+                    System.out.println("membertype");
                 }
                 break;
             case USER_UNDEFINED:

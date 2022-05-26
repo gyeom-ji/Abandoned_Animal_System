@@ -5,12 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 public class Missing_noticeDTO {
-    private AnimalDTO animalDTO;
 
     private long missing_notice_pk;
     private long missing_animal_pk;
@@ -22,5 +22,7 @@ public class Missing_noticeDTO {
     private String missing_county;
     private String missing_city;
     private String missing_address;
+
+    public List<AnimalDTO> animalDTOList;
 
 }

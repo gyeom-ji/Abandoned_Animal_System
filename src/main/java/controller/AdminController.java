@@ -65,8 +65,12 @@ public class AdminController implements DefinedController {
 
     @Override
     public int handler(Protocol recvPt) throws Exception {
+        System.out.println("admin handler");
         // recvPt는 클라이언트로부터 받은 packet
         switch (recvPt.getCode()) { // code로 분류
+            case Protocol.T1_CODE_CREATE:   // 생성
+                createReq(recvPt);
+                break;
             case Protocol.T1_CODE_READ:   // 조회
                 readReq(recvPt);
                 break;
@@ -93,6 +97,7 @@ public class AdminController implements DefinedController {
 
     // 생성 요청 받았을 때 수행할 일
     private void createReq(Protocol recvPt) throws Exception {
+        System.out.println("admin create");
         // entity로 분류
         switch (recvPt.getEntity()) {
             case Protocol.ENTITY_MATERIALS:
@@ -168,9 +173,10 @@ public class AdminController implements DefinedController {
     private void createMaterials(Protocol recvPt) throws Exception {
         Recommend_materialsDTO recommend_materialsDTO = (Recommend_materialsDTO) recvPt.getObject();
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-
+        System.out.println(recommend_materialsDTO.getMaterials_img());
         try {
             recommend_materialsService.create(recommend_materialsDTO);
+            System.out.println("create");
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
@@ -180,11 +186,11 @@ public class AdminController implements DefinedController {
     }
 
     private void createVaccine(Protocol recvPt) throws Exception {
-        Missing_noticeDTO missing_noticeDTO = (Missing_noticeDTO) recvPt.getObject();
+        VaccineDTO vaccineDTO = (VaccineDTO) recvPt.getObject();
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
         try {
-            missing_noticeService.create(missing_noticeDTO);
+            vaccineService.create(vaccineDTO);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
         } catch (IllegalArgumentException e) {
@@ -242,8 +248,8 @@ public class AdminController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options[0], options[1]);
+                    Missing_noticeDTO options = (Missing_noticeDTO) recvPt.getObject();
+                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options);
                     sendPt.setObjectArray(missing_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -275,8 +281,8 @@ public class AdminController implements DefinedController {
             }
             case Protocol.READ_BY_ID: {  // ID 조회
                 try {
-                    String id = (String) recvPt.getObject();
-                    RollDTO roll = rollService.selectByID(id);
+                    RollDTO id = (RollDTO) recvPt.getObject();
+                    RollDTO roll = rollService.selectByID(id.getRoll_id());
                     sendPt.setObject(roll);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -288,8 +294,9 @@ public class AdminController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 타입 조회
                 try {
-                    String type = (String) recvPt.getObject();
-                    RollDTO[] roll = rollService.selectByType(type);
+                    RollDTO type = (RollDTO) recvPt.getObject();
+                    System.out.println(type.getRoll_type());
+                    RollDTO[] roll = rollService.selectByType(type.getRoll_type());
                     sendPt.setObjectArray(roll);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -321,8 +328,8 @@ public class AdminController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 지역으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options[0], options[1]);
+                    Abandoned_noticeDTO options = (Abandoned_noticeDTO) recvPt.getObject();
+                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options.getShelter_listDTOList().get(0).getShelter_county(), options.getShelter_listDTOList().get(0).getShelter_city());
                     sendPt.setObjectArray(abandoned_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -353,8 +360,8 @@ public class AdminController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 옵션으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options[0], options[1]);
+                    Shelter_listDTO options = (Shelter_listDTO) recvPt.getObject();
+                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options.getShelter_county(), options.getShelter_city());
                     sendPt.setObjectArray(shelter_listDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -385,9 +392,10 @@ public class AdminController implements DefinedController {
     private void updateMaterials(Protocol recvPt) throws Exception {
         Recommend_materialsDTO recommend_materialsDTO = (Recommend_materialsDTO) recvPt.getObject();
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-
+        System.out.println(recommend_materialsDTO.getRecommend_materials_pk());
         try {
             recommend_materialsService.update_recommend(recommend_materialsDTO);
+
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -399,8 +407,8 @@ public class AdminController implements DefinedController {
 
     private void updateAdmin(Protocol recvPt) throws Exception {
         RollDTO rollDTO = (RollDTO) recvPt.getObject();
-        Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
+        Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         switch (recvPt.getReadOption()) {
             case Protocol.UPDATE_ROLL: {    // 전화번호, 이름 수정
                 try {
@@ -430,11 +438,11 @@ public class AdminController implements DefinedController {
     }
 
     private void deleteVaccine(Protocol recvPt) throws Exception {
-        long vaccine_pk = (long) recvPt.getObject();
+        VaccineDTO vaccineDTO = (VaccineDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            vaccineService.delete(vaccine_pk);
+            vaccineService.delete(vaccineDTO.getVaccine_pk());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -445,11 +453,11 @@ public class AdminController implements DefinedController {
     }
 
     private void deleteMaterials(Protocol recvPt) throws Exception {
-        long materials_pk = (long) recvPt.getObject();
+        Recommend_materialsDTO recommend_materialsDTO = (Recommend_materialsDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            recommend_materialsService.delete(materials_pk);
+            recommend_materialsService.delete(recommend_materialsDTO.getRecommend_materials_pk());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -460,11 +468,11 @@ public class AdminController implements DefinedController {
     }
 
     private void deleteMissingNotice(Protocol recvPt) throws Exception {
-        long missing_pk = (long) recvPt.getObject();
+        Missing_noticeDTO missing_pk = (Missing_noticeDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            missing_noticeService.delete(missing_pk);
+            missing_noticeService.delete(missing_pk.getMissing_notice_pk());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -475,11 +483,11 @@ public class AdminController implements DefinedController {
     }
 
     private void deleteAbandonedAnimalNotice(Protocol recvPt) throws Exception {
-        String abandoned_notice_num = (String) recvPt.getObject();
+        Abandoned_noticeDTO abandoned_notice_num = (Abandoned_noticeDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            abandoned_noticeService.delete(abandoned_notice_num);
+            abandoned_noticeService.delete(abandoned_notice_num.getAbandoned_notice_num());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 

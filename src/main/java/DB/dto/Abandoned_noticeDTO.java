@@ -3,8 +3,7 @@ package DB.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +16,6 @@ public class Abandoned_noticeDTO {
     private String abandoned_receipt_date;
     private String abandoned_place;
 
-    private AnimalDTO animalDTO;
-    private Shelter_listDTO shelter_listDTO;
-
+    public List<AnimalDTO> animalDTOList;
+    public List<Shelter_listDTO> shelter_listDTOList;
 }

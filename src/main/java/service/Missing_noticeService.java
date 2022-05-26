@@ -33,7 +33,6 @@ public class Missing_noticeService {
         missing.setMissing_county(missing_noticeDTO.getMissing_county());
         missing.setMissing_city(missing_noticeDTO.getMissing_city());
         missing.setMissing_address(missing_noticeDTO.getMissing_address());
-        missing.setAnimalDTO(missing_noticeDTO.getAnimalDTO());
 
         //수정된 실종공고 저장
         missing_noticeDAO.UpdateMissing(missing);
@@ -50,8 +49,8 @@ public class Missing_noticeService {
     }
 
     //실종공고 지역 조회
-    public Missing_noticeDTO[] select_address(String county, String city){
-        return Missing_noticeListToDTO(missing_noticeDAO.FindByOption(county, city));
+    public Missing_noticeDTO[] select_address(Missing_noticeDTO missing_noticeDTO){
+        return Missing_noticeListToDTO(missing_noticeDAO.FindByOption(missing_noticeDTO));
     }
 
     private Missing_noticeDTO[] Missing_noticeListToDTO(List<Missing_noticeDTO> list){

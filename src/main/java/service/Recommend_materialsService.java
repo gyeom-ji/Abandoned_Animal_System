@@ -22,7 +22,7 @@ public class Recommend_materialsService {
 
     //추천상품 수정 기능
     public void update_recommend(Recommend_materialsDTO recommend_materialsDTO) {
-        Recommend_materialsDTO recommend = recommend_materialsDAO.select(recommend_materialsDTO.getRecommended_materials_pk());
+        Recommend_materialsDTO recommend = recommend_materialsDAO.select(recommend_materialsDTO.getRecommend_materials_pk());
         //받은 정보로 해당 추천상품 수정
         recommend.setMaterials_name(recommend_materialsDTO.getMaterials_name());
         recommend.setMaterials_type(recommend_materialsDTO.getMaterials_type());

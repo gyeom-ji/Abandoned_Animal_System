@@ -70,6 +70,7 @@ public class Login {
                 if (recvPt.getType() == Protocol.TYPE_RESPONSE) {
                     if (recvPt.getCode() == Protocol.T2_CODE_SUCCESS) {
                         System.out.println("성공");
+
                         if (id.charAt(0) == '#') {
                             LoginService service = createService("admin", is, os);
                             service.run();

@@ -64,6 +64,7 @@ public class MemberController implements DefinedController {
 
     @Override
     public int handler(Protocol recvPt) throws Exception {
+        System.out.println("member handler");
         // recvPt는 클라이언트로부터 받은 packet
         switch (recvPt.getCode()) { // code로 분류
             case Protocol.T1_CODE_CREATE: // 등록
@@ -109,6 +110,7 @@ public class MemberController implements DefinedController {
 
     // 조회 요청
     private void readReq(Protocol recvPt) throws Exception {
+        System.out.println("readreq");
         switch (recvPt.getEntity()) {
             case Protocol.ENTITY_MEMBER:
                 readMember(recvPt);       // 계정 조회 요청
@@ -240,10 +242,10 @@ public class MemberController implements DefinedController {
                 }
                 break;
             }
-            case Protocol.READ_BY_OPTION: { //지역 조회
-               try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options[0], options[1]);
+            case Protocol.READ_BY_OPTION: {
+                try {
+                    Missing_noticeDTO options = (Missing_noticeDTO) recvPt.getObject();
+                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options);
                     sendPt.setObjectArray(missing_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -275,8 +277,9 @@ public class MemberController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 지역으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options[0], options[1]);
+                    Abandoned_noticeDTO options = (Abandoned_noticeDTO) recvPt.getObject();
+                    System.out.println("option");
+                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options.getShelter_listDTOList().get(0).getShelter_county(), options.getShelter_listDTOList().get(0).getShelter_city());
                     sendPt.setObjectArray(abandoned_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -307,13 +310,12 @@ public class MemberController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 옵션으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options[0], options[1]);
+                    Shelter_listDTO options = (Shelter_listDTO) recvPt.getObject();
+                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options.getShelter_county(), options.getShelter_city());
                     sendPt.setObjectArray(shelter_listDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
-                    // 생성된 개설교과목 존재하지 않을 경우 - 실패메시지 전송
                     sendPt.setCode(Protocol.T2_CODE_FAIL);
                     sendPt.send(os);
                 }
@@ -326,8 +328,10 @@ public class MemberController implements DefinedController {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
         try {
-            RollDTO rollDTO = (RollDTO) recvPt.getObject();
-            RollDTO roll = rollService.selectByID(rollDTO.getRoll_id());
+            System.out.println("read member");
+            RollDTO id = ( RollDTO)recvPt.getObject();
+            RollDTO roll = rollService.selectByID(id.getRoll_id());
+            System.out.println(roll.getRoll_name());
             sendPt.setObject(roll);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
@@ -339,9 +343,10 @@ public class MemberController implements DefinedController {
 
     private void readForm(Protocol recvPt) throws Exception {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-        String roll_id= (String) recvPt.getObject();
+        RollDTO roll_id = (RollDTO) recvPt.getObject();
+        System.out.println(roll_id.getRoll_id());
         try {
-            FormDTO[] formDTOS = formService.FindByMember(roll_id);
+            FormDTO[] formDTOS = formService.FindByMember(roll_id.getRoll_id());
             sendPt.setObjectArray(formDTOS);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
@@ -415,11 +420,11 @@ public class MemberController implements DefinedController {
     }
 
     private void deleteMissingNotice(Protocol recvPt) throws Exception {
-        long missing_notice_pk = (long) recvPt.getObject();
-
+        Missing_noticeDTO missing_notice_pk = (Missing_noticeDTO) recvPt.getObject();
+        System.out.println(missing_notice_pk.getMissing_notice_pk());
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            missing_noticeService.delete(missing_notice_pk);
+            missing_noticeService.delete(missing_notice_pk.getMissing_notice_pk());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 

@@ -47,12 +47,13 @@
     </update>
 
     <insert id="InsertAnimal" parameterType="DB.dto.AnimalDTO">
-        <selectKey resultType="long" keyProperty="animal_pk" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
+
 
         INSERT INTO ANIMAL(animal_kind, animal_sex, animal_age, animal_color, animal_feature, animal_breed, animal_neuter, animal_img)
         VALUES (#{animal_kind}, #{animal_sex}, #{animal_age}, #{animal_color}, #{animal_feature}, #{animal_breed}, #{animal_neuter}, #{animal_img})
+        <selectKey resultType="int" keyProperty="animal_pk" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <select id="SelectAnimalAbandoned" resultMap="result,AbandonedResult">

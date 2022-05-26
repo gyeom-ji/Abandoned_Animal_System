@@ -24,9 +24,10 @@ public class FormDAO {
     public List<FormDTO> FindByMember(String roll_id)
     {
         List<FormDTO> list = null;
+        RollDTO rollDTO = new RollDTO(roll_id);
         SqlSession session = sqlSessionFactory.openSession();
         try{
-            list = session.selectList("mapper.FormMapper.FindByMember", roll_id);
+            list = session.selectList("mapper.FormMapper.FindByMember", rollDTO.getRoll_id());
         } finally {
             session.close();
         }
@@ -75,12 +76,12 @@ public class FormDAO {
     public void InsertForm(FormDTO formDTO)
     {
         SqlSession session = null;
-        String id = formDTO.getRollDTO().getRoll_id();
+        String id = formDTO.getRollDTOList().get(0).getRoll_id();
+        System.out.println("id : " + id);
         RollDTO rollDTO = rollDAO.select(id);
-        formDTO.getRollDTO().setRoll_pk(rollDTO.getRoll_pk());
-        long abandoned = formDTO.getAbandoned_noticeDTO().getAbandoned_notice_pk();
-        Abandoned_noticeDTO abandoned_noticeDTO = abandoned_noticeDAO.FindByID(abandoned);
-        formDTO.getAbandoned_noticeDTO().setAbandoned_notice_pk(abandoned_noticeDTO.getAbandoned_notice_pk());
+        formDTO.setRoll_pk(rollDTO.getRoll_pk());
+        long abandoned = formDTO.getAbandoned_notice_pk();
+        formDTO.setAbandoned_notice_pk(abandoned);
         try {
             session = sqlSessionFactory.openSession(true);
             session.insert("mapper.FormMapper.InsertForm", formDTO);

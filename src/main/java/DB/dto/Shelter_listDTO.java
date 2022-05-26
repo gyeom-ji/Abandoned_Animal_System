@@ -3,7 +3,7 @@ package DB.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
+import java.util.List;
 import java.sql.Time;
 
 @Getter
@@ -20,4 +20,5 @@ public class Shelter_listDTO {
     private String shelter_open_time;
     private String shelter_close_time;
 
+    public Shelter_listDTO(){}
 }

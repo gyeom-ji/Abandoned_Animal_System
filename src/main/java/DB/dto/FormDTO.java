@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -13,8 +15,7 @@ public class FormDTO {
     private long abandoned_notice_pk;
     private String form_type;
     private String form_approval;
-    private RollDTO rollDTO;
-    private Shelter_listDTO shelter_listDTO;
-    private Abandoned_noticeDTO abandoned_noticeDTO;
-
+    public List<Abandoned_noticeDTO> abandonedNoticeDTOList;
+    public List<RollDTO> rollDTOList;
+    public List<Shelter_listDTO> shelter_listDTOList;
 }

@@ -8,7 +8,10 @@
         <result property="missing_email" column="missing_email"/>
         <result property="missing_phone" column="missing_phone"/>
         <result property="missing_date" column="missing_date"/>
-        <result property="missing_place" column="missing_place"/>
+        <result property="missing_county" column="missing_county"/>
+        <result property="missing_city" column="missing_city"/>
+        <result property="missing_address" column="missing_address"/>
+        <collection property="animalDTOList" javaType="java.util.ArrayList" resultMap="animal_result" />
     </resultMap>
     <resultMap id="animal_result" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
@@ -22,10 +25,10 @@
         <result property="animal_img" column="animal_img"/>
     </resultMap>
 
-    <select id="ReadAll" resultMap="result,animal_result">
+    <select id="ReadAll" resultMap="result">
         SELECT *
         FROM MISSING_NOTICE as missing
-                 JOIN ANIMAL as animal
+                 inner JOIN ANIMAL as animal
                       on missing.missing_animal_pk = animal.animal_pk
 
     </select>
@@ -33,10 +36,10 @@
     <select id="FindByOption" resultMap="result">
         SELECT *
         FROM MISSING_NOTICE as missing
-        JOIN ANIMAL as animal
+        inner JOIN ANIMAL as animal
         on missing.missing_animal_pk = animal.animal_pk
         <where>
-           missing_county = #{missing_county} AND missing_city= #{missing_city}
+           missing_county=#{missing_county} AND missing_city=#{missing_city}
         </where>
     </select>
 
@@ -59,8 +62,8 @@
             missing_date=#{missing_date},
             missing_county=#{missing_county},
             missing_city=#{missing_city},
-            missing_address=#{missing_address},
-            WHERE missing_notice_pk= #{missing_notice_pk}
+            missing_address=#{missing_address}
+            WHERE missing_notice_pk=#{missing_notice_pk}
     </update>
 
     <insert id="InsertMissing" parameterType="DB.dto.Missing_noticeDTO">
@@ -68,10 +71,6 @@
                                   , missing_city, missing_address)
         VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}
                ,#{missing_city}, #{missing_address})
-INSERT INTO MISSING_NOTICE(missing_animal_pk,missing_person_name, missing_animal_name, missing_email, missing_phone, missing_date, missing_county
-        , missing_city, missing_address)
-        VALUES (#{missing_animal_pk},#{missing_person_name},#{missing_animal_name},#{missing_email}, #{missing_phone}, #{missing_date}, #{missing_county}
-        ,#{missing_city}, #{missing_address})
 
     </insert>
 

@@ -8,16 +8,19 @@
         <result property="abandoned_notice_num" column="abandoned_notice_num"/>
         <result property="abandoned_receipt_date" column="abandoned_receipt_date"/>
         <result property="abandoned_place" column="abandoned_place"/>
+        <collection property="shelter_listDTOList" javaType="java.util.ArrayList" resultMap="shelterResult" />
+        <collection property="animalDTOList" javaType="java.util.ArrayList" resultMap="animalResult" />
     </resultMap>
     <resultMap id="shelterResult" type="DB.dto.Shelter_listDTO">
         <result property="shelter_list_pk" column="shelter_list_pk"/>
         <result property="shelter_name" column="shelter_name"/>
         <result property="shelter_phone" column="shelter_phone"/>
         <result property="shelter_county" column="shelter_county"/>
-        <result property="shelter_type" column="shelter_type"/>
-        <result property="shelter_opentime" column="shelter_opentime"/>
-        <result property="shelter_closetime" column="shelter_closetime"/>
         <result property="shelter_city" column="shelter_city"/>
+        <result property="shelter_type" column="shelter_type"/>
+        <result property="shelter_open_time" column="shelter_open_time"/>
+        <result property="shelter_close_time" column="shelter_close_time"/>
+        <result property="shelter_address" column="shelter_address"/>
     </resultMap>
     <resultMap id="animalResult" type="DB.dto.AnimalDTO">
         <result property="animal_pk" column="animal_pk"/>
@@ -33,14 +36,20 @@
 
     <select id="ReadAll" resultMap="result">
         SELECT *
-        FROM ABANDONED_NOTICE
+        FROM ABANDONED_NOTICE as a
+                 inner JOIN shelter_list as s
+                      ON a.shelter_list_pk = s.shelter_list_pk
+                 inner JOIN ANIMAL as ani
+                            ON a.abandoned_animal_pk = ani.animal_pk
     </select>
 
-    <select id="FindByOption" resultMap="result,shelterResult,animalResult" >
+    <select id="FindByOption" resultMap="result" parameterType="DB.dto.Shelter_listDTO">
         SELECT *
         FROM ABANDONED_NOTICE as a
-        JOIN SHELTER_LIST as s
+        inner JOIN SHELTER_LIST as s
         ON a.shelter_list_pk = s.shelter_list_pk
+        inner JOIN ANIMAL as ani
+        ON a.abandoned_animal_pk = ani.animal_pk
         <where>
             s.shelter_county = #{shelter_county} AND s.shelter_city= #{shelter_city}
         </where>
@@ -48,9 +57,9 @@
 
     <update id="UpdateAbandoned" parameterType="DB.dto.Abandoned_noticeDTO">
         UPDATE ABANDONED_NOTICE
-        SET abandoned_notice_num=#{abandoned_notice_num},
+        SET
             abandoned_receipt_date=#{abandoned_receipt_date},
-            abandoned_place=#{abandoned_place},
+            abandoned_place=#{abandoned_place}
             WHERE abandoned_notice_num= #{abandoned_notice_num}
     </update>
 

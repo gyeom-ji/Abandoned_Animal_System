@@ -10,7 +10,7 @@ import java.awt.*;
 @Setter
 @ToString
 public class Recommend_materialsDTO {
-    private long recommended_materials_pk;
+    private long recommend_materials_pk;
     private String materials_name;
     private String materials_type;
     private String materials_url;

@@ -28,6 +28,8 @@ public class StaffController implements DefinedController {
     private final Missing_noticeService missing_noticeService;
     private final AnimalService animalService;
     private final FormService formService;
+    private final Recommend_materialsService recommend_materialsService;
+    private final VaccineService vaccineService;
 
     private final InputStream is;
     private final OutputStream os;
@@ -56,6 +58,8 @@ public class StaffController implements DefinedController {
         missing_noticeService = new Missing_noticeService(missing_noticeDAO);
         animalService = new AnimalService(animalDAO);
         formService = new FormService(formDAO);
+        recommend_materialsService = new Recommend_materialsService(recommend_materialsDAO);
+        vaccineService = new VaccineService(vaccineDAO);
     }
 
     @Override
@@ -124,6 +128,12 @@ public class StaffController implements DefinedController {
             case Protocol.ENTITY_FORM:
                 readForm(recvPt);  // 신청서 조회 요청
                 break;
+            case Protocol.ENTITY_MATERIALS:
+                readMaterials();  // 상품 조회 요청
+                break;
+            case Protocol.ENTITY_VACCINE:
+                readVaccine();  // 백신 조회 요청
+                break;
             default:
         }
     }
@@ -154,7 +164,7 @@ public class StaffController implements DefinedController {
                 deleteAbandonedAnimalNotice(recvPt);   // 유기공고 삭제 요청
                 break;
             case Protocol.ENTITY_SHELTER_LIST:
-                readShelterList(recvPt);  // 보호소 리스트 삭제 요청
+                deleteShelterList(recvPt);  // 보호소 리스트 삭제 요청
                 break;
             default:
         }
@@ -236,8 +246,10 @@ public class StaffController implements DefinedController {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
         try {
-            RollDTO rollDTO = (RollDTO) recvPt.getObject();
-            RollDTO roll = rollService.selectByID(rollDTO.getRoll_id());
+            System.out.println("read staff");
+            RollDTO id = (RollDTO)recvPt.getObject();
+            RollDTO roll = rollService.selectByID(id.getRoll_id());
+            System.out.println(roll.getRoll_name());
             sendPt.setObject(roll);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
@@ -266,8 +278,8 @@ public class StaffController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options[0], options[1]);
+                    Missing_noticeDTO options = (Missing_noticeDTO) recvPt.getObject();
+                    Missing_noticeDTO[] missing_noticeDTOS = missing_noticeService.select_address(options);
                     sendPt.setObjectArray(missing_noticeDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -299,9 +311,11 @@ public class StaffController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 지역으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options[0], options[1]);
+                    Abandoned_noticeDTO options = (Abandoned_noticeDTO) recvPt.getObject();
+                    System.out.println(options.getShelter_listDTOList().get(0).getShelter_county());
+                    Abandoned_noticeDTO[] abandoned_noticeDTOS = abandoned_noticeService.select_address(options.getAbandoned_place(), options.getAbandoned_notice_num());
                     sendPt.setObjectArray(abandoned_noticeDTOS);
+                    System.out.println("a "+abandoned_noticeDTOS[0].getAbandoned_notice_num());
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
                 } catch (IllegalArgumentException e) {
@@ -331,8 +345,8 @@ public class StaffController implements DefinedController {
             }
             case Protocol.READ_BY_OPTION: {  // 옵션으로 조회
                 try {
-                    String[] options = (String[]) recvPt.getObjectArray();
-                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options[0], options[1]);
+                    Shelter_listDTO options = (Shelter_listDTO) recvPt.getObject();
+                    Shelter_listDTO[] shelter_listDTOS = shelter_listService.select_address(options.getShelter_county(), options.getShelter_city());
                     sendPt.setObjectArray(shelter_listDTOS);
                     sendPt.setCode(Protocol.T2_CODE_SUCCESS);
                     sendPt.send(os);
@@ -349,8 +363,8 @@ public class StaffController implements DefinedController {
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
 
         try {
-            String shelter_name = (String) recvPt.getObject();
-            FormDTO[] formDTOS = formService.FindByStaff(shelter_name);
+            Shelter_listDTO shelter_name = (Shelter_listDTO) recvPt.getObject();
+            FormDTO[] formDTOS = formService.FindByStaff(shelter_name.getShelter_name());
             sendPt.setObjectArray(formDTOS);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
@@ -365,8 +379,6 @@ public class StaffController implements DefinedController {
         RollDTO rollDTO = (RollDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
-
-
         switch (recvPt.getReadOption()) {
             case Protocol.UPDATE_ROLL: {    // 전화번호, 이름 수정
                 try {
@@ -411,11 +423,13 @@ public class StaffController implements DefinedController {
     }
 
     private void updateForm(Protocol recvPt) throws Exception {
-        long form_pk = (long) recvPt.getObject();
+        FormDTO formDTO = (FormDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
+
+        System.out.println(formDTO.getForm_approval());
         try {
-            formService.update_approval(form_pk);
+            formService.update_approval(formDTO);
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -426,11 +440,11 @@ public class StaffController implements DefinedController {
     }
 
     private void deleteAbandonedAnimalNotice(Protocol recvPt) throws Exception {
-        String abandoned_notice_num = (String) recvPt.getObject();
+        Abandoned_noticeDTO abandoned_notice_num = (Abandoned_noticeDTO) recvPt.getObject();
 
         Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
         try {
-            abandoned_noticeService.delete(abandoned_notice_num);
+            abandoned_noticeService.delete(abandoned_notice_num.getAbandoned_notice_num());
             sendPt.setCode(Protocol.T2_CODE_SUCCESS);
             sendPt.send(os);
 
@@ -439,4 +453,50 @@ public class StaffController implements DefinedController {
             sendPt.send(os);
         }
     }
+
+    private void deleteShelterList(Protocol recvPt) throws Exception {
+        Shelter_listDTO shelter_listDTO = (Shelter_listDTO) recvPt.getObject();
+
+        Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
+        try {
+            shelter_listService.delete(shelter_listDTO);
+            sendPt.setCode(Protocol.T2_CODE_SUCCESS);
+            sendPt.send(os);
+
+        } catch (IllegalArgumentException e) {
+            sendPt.setCode(Protocol.T2_CODE_FAIL);
+            sendPt.send(os);
+        }
+    }
+
+    private void readVaccine() throws Exception {
+        Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
+
+        try {
+            VaccineDTO[] vaccineDTOS = vaccineService.selectAll();
+            sendPt.setObjectArray(vaccineDTOS);
+            sendPt.setCode(Protocol.T2_CODE_SUCCESS);
+            sendPt.send(os);
+        } catch (IllegalArgumentException e) {
+            sendPt.setCode(Protocol.T2_CODE_FAIL);
+
+            sendPt.send(os);
+        }
+    }
+
+    private void readMaterials() throws Exception {
+        Protocol sendPt = new Protocol(Protocol.TYPE_RESPONSE);
+
+        try {
+            Recommend_materialsDTO[] recommend_materialsDTOS = recommend_materialsService.selectAll();
+            sendPt.setObjectArray(recommend_materialsDTOS);
+            sendPt.setCode(Protocol.T2_CODE_SUCCESS);
+            sendPt.send(os);
+        } catch (IllegalArgumentException e) {
+            sendPt.setCode(Protocol.T2_CODE_FAIL);
+
+            sendPt.send(os);
+        }
+    }
+
 }
